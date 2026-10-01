@@ -250,3 +250,74 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ------------------------------------------------------------------
+   Landing page "deep space" treatment. Scoped to the home page only
+   (the page forces .dark). Emerald and teal, never purple.
+   ------------------------------------------------------------------ */
+
+@layer utilities {
+  .landing-stars {
+    background-image:
+      radial-gradient(1.2px 1.2px at 12% 18%, rgb(255 255 255 / 0.9), transparent),
+      radial-gradient(1px 1px at 28% 62%, rgb(255 255 255 / 0.6), transparent),
+      radial-gradient(1.4px 1.4px at 44% 12%, rgb(255 255 255 / 0.8), transparent),
+      radial-gradient(1px 1px at 63% 78%, rgb(255 255 255 / 0.55), transparent),
+      radial-gradient(1.2px 1.2px at 81% 30%, rgb(255 255 255 / 0.85), transparent),
+      radial-gradient(1px 1px at 92% 66%, rgb(255 255 255 / 0.6), transparent),
+      radial-gradient(1px 1px at 6% 88%, rgb(255 255 255 / 0.5), transparent),
+      radial-gradient(1.2px 1.2px at 54% 44%, rgb(255 255 255 / 0.45), transparent);
+    background-size: 520px 520px;
+  }
+  .landing-capsule {
+    border: 1px solid rgb(255 255 255 / 0.12);
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.035), rgb(255 255 255 / 0.01));
+  }
+  .landing-capsule-glow {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(#0c0f0d, #0c0f0d) padding-box,
+      linear-gradient(135deg, #4fb286, rgb(79 178 134 / 0.1) 45%, #7fd6d0) border-box;
+  }
+  .landing-orb {
+    background:
+      radial-gradient(circle at 32% 28%, #d6fff0 0%, #6fe0b6 18%, #1f8f73 48%, #0a3a35 78%, #06201e 100%);
+    box-shadow:
+      0 0 80px -10px rgb(79 178 134 / 0.45),
+      inset -18px -22px 50px rgb(0 0 0 / 0.55);
+  }
+  .landing-orb-bands {
+    background:
+      repeating-linear-gradient(
+        168deg,
+        transparent 0 14px,
+        rgb(255 255 255 / 0.1) 14px 18px,
+        transparent 18px 34px
+      );
+    mix-blend-mode: soft-light;
+  }
+  .landing-rings {
+    background:
+      radial-gradient(circle at 50% 100%, #4fe0b4 0 22%, transparent 22.5%),
+      radial-gradient(circle at 50% 100%, #2fbf94 0 38%, transparent 38.5%),
+      radial-gradient(circle at 50% 100%, #1f8f73 0 56%, transparent 56.5%),
+      radial-gradient(circle at 50% 100%, #0f5b4d 0 78%, #08231f 78.5%);
+  }
+  .landing-horizon {
+    background: radial-gradient(60% 100% at 50% 0%, rgb(47 191 148 / 0.28), transparent 70%);
+  }
+}
+
+@keyframes landing-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+@keyframes landing-marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
