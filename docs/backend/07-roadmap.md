@@ -48,7 +48,7 @@ Status: draft v1. Effort is in **engineer-weeks for one senior full-stack/backen
 
 ### M7. Assistant, search, embeddings (3 wk)
 
-- **Scope:** `embed.index` (chunking, `bge-m3`, HNSW), `search.search_all` with FTS + vector RRF, Node-side caps, diversity, highlights and snippets. Assistant ask (RAG with citation verification), the deterministic fallback engine port, suggestions port, history. Quotas.
+- **Scope:** `embed.index` (chunking, `bge-m3`, HNSW), `api.search_all` with FTS + vector RRF, Node-side caps, diversity, highlights and snippets. Assistant ask (RAG with citation verification), the deterministic fallback engine port, suggestions port, history. Quotas.
 - **Exit:** search p95 under 300 ms (FTS-only queries under 150 ms) on 10k synthetic meetings. Assistant: 100% of returned sources are valid segments (enforced). On a 100-question eval, answer correctness is at least 80% and `not_found` precision at least 90%. Cross-meeting ask is designed (stretch).
 - **Deps:** M6 (insight chunks), M2. **Risks:** HNSW filtered-recall issues (pgvector version [unverified]).
 

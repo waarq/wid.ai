@@ -457,7 +457,7 @@ create table public.capture_sessions (
   accumulated_ms        bigint not null default 0,     -- banked capture time (mirrors capture-machine.ts)
   last_heartbeat_at     timestamptz not null default now(),
   last_chunk_seq        integer not null default -1,
-  storage_prefix        text not null,                 -- capture-chunks/{org}/{meeting}/{session}/
+  storage_prefix        text not null,                 -- {org}/{meeting}/{session}/  (object name inside bucket capture-chunks)
   stopped_at            timestamptz,
   client_elapsed_seconds numeric(10,3),
   created_at            timestamptz not null default now()

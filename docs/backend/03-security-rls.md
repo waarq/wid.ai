@@ -253,7 +253,7 @@ create policy embeddings_none on public.embedding_chunks for select to authentic
   using (app_private.can_read_transcript(meeting_id));   -- read only via search RPC in practice
 ```
 
-Tables with **no** `authenticated` write policy (`meetings` child insight tables on insert, `transcript_segments`, `processing_*`, `embedding_chunks`, `capture_chunks`) are written by the worker (service role) or by `security definer` RPC functions that check ownership explicitly. Examples: `app_private.start_capture`, `stop_capture`, `share_meeting`, `toggle_action_item`.
+Tables with **no** `authenticated` write policy (`meetings` child insight tables on insert, `transcript_segments`, `processing_*`, `embedding_chunks`, `capture_chunks`) are written by the worker (service role) or by `security definer` RPC functions that check ownership explicitly. Examples: `app_private.start_capture`, `stop_capture`, `share_meeting`. Simple single-row updates (action item toggle, alert read) use the user-scoped client directly under the update policies.
 
 ### 4.3 RPC functions for atomic request-path writes
 
@@ -300,8 +300,25 @@ Enforcement: `common/supabase.ts` exports `userClient(req)` and `serviceClient`.
 | Bucket | Public | Who writes | Who reads | Path |
 | --- | --- | --- | --- | --- |
 | `capture-chunks` | no | browser (user JWT), insert only, path must match a live `capture_sessions.storage_prefix` owned by the user (storage RLS policy calls `app_private.owns_live_capture_prefix(name)`) | worker (service role) | `{org}/{meeting}/{session}/{part:04}-{seq:06}.webm` |
-| `recordings` | no | browser via TUS for manual uploads (path pre-registered by the API, same policy pattern); worker for assembled and normalised files | API issues **signed URLs** (TTL 1 hour) after `can_read_transcript` and `share_recording` checks | `{org}/{meeting}/{recording}/original.*`, `audio.opus`, `video.webm` |
+| `recordings` | no | browser via TUS for manual uploads (path pre-registered by the API, same policy pattern); worker for assembled and normalised files | API issues **signed URLs** (TTL 1 hour) after `can_read_transcript` and `share_recording` checks | `{org}/{meeting}/{recording}/original.*`, `audio.webm` (Opus), `video.webm` |
 | `avatars` | public-read via signed or transformed URLs, or a public bucket | API (`POST /me/avatar`) | anyone with the URL | `{user}/{hash}.webp` |
+
+```sql
+create or replace function app_private.owns_live_capture_prefix(p_name text) returns boolean
+language sql stable security definer set search_path = '' as $$
+  select exists (select 1 from public.capture_sessions s
+                 where s.user_id = (select auth.uid())
+                   and s.status in ('active','paused','interrupted','finalizing')
+                   and p_name like (s.storage_prefix || '%')
+                   and p_name !~ '\.\.')                       -- no path traversal
+$$;
+create policy capture_chunks_insert on storage.objects for insert to authenticated
+  with check (bucket_id = 'capture-chunks' and app_private.owns_live_capture_prefix(name));
+-- recordings: same pattern with app_private.owns_pending_upload(name) over recordings.status = 'uploading'
+-- no select/update/delete policies for authenticated on these buckets (reads go through signed URLs)
+```
+
+`storage_prefix` is stored **without** the bucket name (`{org}/{meeting}/{session}/`), because `storage.objects.name` excludes the bucket.
 
 - Bucket file-size limits: `capture-chunks` 8 MB, `recordings` 4 GB (Pro plan or higher; up to 500 GB is configurable [verified: [Storage limits](https://supabase.com/docs/guides/storage/uploads/file-limits)]). Allowed MIME types are set per bucket.
 - Signed playback URLs are minted per `GET /meetings/:id` response for permitted viewers and logged to `ops.audit_log` (`recording.signed_url`) for the owner's later review.

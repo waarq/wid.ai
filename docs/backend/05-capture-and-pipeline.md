@@ -75,7 +75,7 @@ getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGain
 
 - `MediaRecorder.start(timeslice = 5000)` emits a `Blob` every 5 s (about 40 KB at 64 kbps). Chunk `seq` increases monotonically per session.
 - A WebM stream from one `MediaRecorder` instance is only decodable as a whole: the header is in the first chunk only. Concatenating chunks in order gives a valid file. A lost chunk in the middle corrupts the cluster after it, but decoders usually resync at the next cluster. **To bound the damage, we rotate the recorder into a new self-contained "part"** on every pause/resume, every 15 minutes, and after any recorder error. Each part starts with a fresh header. The gap at rotation is tens of milliseconds [unverified]. The cost is negligible for speech.
-- Object path: `capture-chunks/{org}/{meeting}/{session}/{part:04}-{seq:06}.webm`.
+- Object path: bucket `capture-chunks`, name `{org}/{meeting}/{session}/{part:04}-{seq:06}.webm`.
 
 ### 3.3 Upload path
 
@@ -446,7 +446,7 @@ Cross-meeting assistant ("What did Northstar Labs ask for across all calls?"): *
 
 Contract from `search-engine.ts`: every query token must match (prefix plus light stemming); results are scored per type with field weights; per-type caps (meeting 5, transcript 6, action 5, decision 5, deal 5, person 5); at most 2 transcript hits per meeting unless scoped to a meeting; current decisions outrank superseded ones (+10); open actions slightly above completed (+5); dismissed actions excluded; deals and people are excluded when `meetingId` is set; results sorted by score; default limit 25.
 
-Implementation (`search.search_all(q, types, meeting_id, limit)` SQL function, **SECURITY INVOKER** under the user's JWT, prefiltered by `app_private.readable_meeting_ids()`):
+Implementation: `api.search_all(q, types, meeting_id, limit)`, a SQL function in the `api` schema of thin RPC wrappers exposed to PostgREST ([03-security-rls.md](./03-security-rls.md) section 4.3). It is **SECURITY INVOKER** under the user's JWT and prefiltered by `app_private.readable_meeting_ids()`.
 
 ```text
 tsquery  = AND of  (token:*)  for each non-stopword token   -- 'launc' finds 'launch'; 'english' config stems
