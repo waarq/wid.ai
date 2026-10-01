@@ -2,6 +2,8 @@
 
 Each question has a recommendation and the cost of deciding wrong. Questions marked **(by M#)** block that milestone.
 
+The owner's 2026-10-01 answers (demo slice first, completely free, no local GPU, Supabase Free plus a free Node host, internal/friends pilot, Google OAuth in Testing mode, no Zoom, English only, browser capture) resolve or defer several of these **for the demo slice**. The status table and the new questions the slice raises (QD1 to QD9) are at the end of this file. The recommendations below still stand for the long-term plan.
+
 | # | Question | Recommendation | Cost of deciding wrong |
 | --- | --- | --- | --- |
 | Q1 | **Self-hosted vs hosted AI** (ASR, diarization, LLM, embeddings)? **(by M5)** | **Hybrid behind provider interfaces.** Self-host ASR, diarization and embeddings (faster-whisper, pyannote, `bge-m3`) on an on-demand GPU. They are cheap, mature and keep raw audio in our infrastructure. Decide the **LLM** after the M6 bake-off. Default to self-hosted if `qwen3:14b`/`gpt-oss:20b` meet the eval targets. Otherwise use a hosted model under a DPA with no-training and zero/short-retention terms. Keep overflow routing to hosted off until the privacy policy allows it. | **All self-hosted too early:** GPU ops consume the single engineer, extraction quality may miss targets, and latency of 6 to 11 min vs 2 to 4 min. **All hosted:** customer audio and transcripts go to third parties, which undermines the "privacy-first" positioning, adds sub-processor disclosures and creates Google Limited Use exposure (R18). Switching later is cheap *because* of the abstraction. Prompts may need retuning per model (about 1 week). |
@@ -24,3 +26,44 @@ Each question has a recommendation and the cost of deciding wrong. Questions mar
 | Q18 | **Desktop agent or bot vendor priority?** | Do not start before M9 data exists. Measure the share of mic-only and upload-fallback captures by platform. Above 30%, start a desktop agent spike (macOS first). Consider a bot vendor only if users explicitly want "send WIT to the meeting". | **Starting early:** 6 to 10 weeks on signing, notarisation and two audio stacks before product-market fit. **Starting late:** Mac + Zoom-desktop users (likely a large segment) get mic-only notes and churn. |
 | Q19 | **Assistant scope:** single-meeting only (current interface) or cross-meeting at MVP? | Single-meeting at MVP (as built in the UI). Cross-meeting designed in M7 and shipped after launch behind a flag, needing `POST /v1/assistant/ask`. | Shipping cross-meeting early adds the hardest RAG quality and permission-filtering work to the critical path. Never shipping it leaves the PRD's "searchable meeting memory" weaker than competitors. |
 | Q20 | **Frontend interface additions** listed in [02-data-model.md](./02-data-model.md) section 16 (Topic traceability, key-point sources, `discardCapture`, upload service, speaker assignment, new alert types, `audioUrlExpiresAt`)? | Approve them as **additive** changes during M2 to M5, landing one PR per milestone together with the API change. | Without them: insights that can't be traced (Topic, keyPoints), no way to fix wrong speakers, missing capture flows. With them done carelessly: frontend churn. Additive fields keep the risk low. |
+
+## Status after the demo-slice decision (2026-10-01)
+
+"Resolved (slice)" means the owner's answers settle it for the demo slice in [09-demo-slice-free-stack.md](./09-demo-slice-free-stack.md). The long-term question stays open unless it says "Resolved". "Deferred" means the slice doesn't need an answer.
+
+| # | Status | For the slice |
+| --- | --- | --- |
+| Q1 | **Resolved (slice)**; long-term deferred | Hosted free tiers: Groq Whisper (ASR), Cerebras and Groq `gpt-oss-120b` (LLM), Cloudflare Workers AI (fallback). No self-hosting, since there is no GPU. Revisit with the M6 bake-off. |
+| Q2 | Deferred | No GPU in the slice |
+| Q3 | Partly resolved (slice) | Internal/friends pilot only. Consent attestation stays on. The pilot participant notice is in 09 section 1.6. Legal sign-off is still required before any public launch. |
+| Q4 | Deferred | Personal org only. Team Calls is hidden. |
+| Q5 | Open (slice: see QD7) | One region for both Supabase and Render |
+| Q6 | Deferred; metering partly done | `ops.provider_usage` meters provider usage per day. No billing. |
+| Q7 | **Resolved: no Zoom** for now | Zoom stays `coming_soon` |
+| Q8 | **Resolved (slice): no email** | In-app alerts only (`meeting_ready`, `processing_failed`) |
+| Q9 | Deferred | No sharing in the slice, so only the owner edits |
+| Q10 | **Resolved: yes** | Unchanged from the recommendation |
+| Q11 | Deferred (off) | No link sharing |
+| Q12 | **Resolved: no video** | Audio only |
+| Q13 | Deferred | No monorepo move. Top-level `api/` and `supabase/`, contracts in `src/contracts/`. |
+| Q14 | Resolved (slice): **30 days** | Set to 30 by `bootstrap_user` because of the 1 GB Free storage cap. The long-term default stays 90. |
+| Q15 | **Resolved: English only** | `language: 'en'` sent to ASR |
+| Q16 | Unchanged | Auto-process after 24 h (in-process sweep) |
+| Q17 | **Resolved (slice)** | Groq, Cerebras, Cloudflare (allowlisted for real audio). Gemini free, AssemblyAI free, OpenRouter `:free` and Mistral Experiment are synthetic-only. Production providers with a DPA are still open. |
+| Q18 | Deferred | Browser capture only |
+| Q19 | **Resolved: single meeting** | As recommended |
+| Q20 | Mostly deferred | Only the optional `Meeting.audioUrlExpiresAt` is used. Topic evidence fields may be sent but are not required. |
+
+## New questions raised by the demo slice
+
+| # | Question | Recommendation | Cost of deciding wrong |
+| --- | --- | --- | --- |
+| QD1 | **Who are the Google test users, and is the 7-day calendar token expiry acceptable?** (Testing mode: at most 100 test users; refresh tokens for non-basic scopes expire after 7 days) **(by D1)** | List the 3 to 5 pilot accounts and the demo accounts now. Accept weekly reconnects. Reconnect at T-24 h before every demo. | Forgetting means calendar access breaks on stage. Wrong accounts mean the "access denied" screen for a pilot user. |
+| QD2 | **May pilot users capture meetings with people outside the pilot?** | **No.** Only meetings where every participant has read the pilot notice (09 section 1.6). No customer, confidential or EU/UK-participant meetings on free tiers. | Third-party personal data goes to providers without a DPA, which is a legal and reputational exposure for an unfunded company. |
+| QD3 | **Frontend host:** Vercel Hobby (non-commercial use only) or an alternative? **(by D1)** | Use Netlify's free plan, which is reported to allow commercial use [unverified], or accept Vercel Pro when funded. Confirm Netlify's current terms before deploying. | Vercel may pause a Hobby deployment used commercially, possibly right before a demo. |
+| QD4 | **Is a payment card available for "free but card-verified" services?** (Google Cloud for the GCE `e2-micro` fallback host and Cloud Run; Oracle) | If yes, set up the GCE `e2-micro` fallback in D0 so a host switch is a DNS change. If no, Render is the only host, and its sleep and restart risk is accepted. | Without a fallback host, a Render incident on demo day leaves only the screen recording. |
+| QD5 | **Demo date, and is a disclosed replay acceptable if the live run fails?** **(by D0)** | Fix the date at least 6 weeks out. Agree that the live run is attempted first and any fallback is announced. | Too soon means cutting below the cut line. An undisclosed replay found out later costs credibility with investors. |
+| QD6 | **Multi-speaker remote side:** accept one "Speaker 2" label for all remote voices in the slice, or spend about 2 days on a Voxtral diarization spike? | Accept it for the slice. The wow script has one remote speaker. Run the Voxtral spike only after D4, and only if Mistral's free-plan training opt-out is confirmed. | Investors may ask about 3-person meetings. Demo with two people and state honestly that multi-speaker diarization is next. |
+| QD7 | **Region for Supabase and Render** (they must match) **(by D0)** | Frankfurt (`eu-central-1`, and Render's Frankfurt region) if the owner and pilot are in South Asia or Europe; US East if a US investor demo matters more than upload latency. The AI providers are in the US either way. | A mismatch adds about 100 to 200 ms per DB round trip from the API. Moving a Supabase project later is a dump and restore. |
+| QD8 | **What happens to pilot data afterwards?** | Delete all real pilot meetings when the pilot ends (or after 30 days). Keep only the synthetic goldens and the seeded demo meeting. | Lingering real recordings in a free-tier project with no PITR or DPA is a liability. |
+| QD9 | **Is the investor demo a scripted live meeting or a real meeting?** | A **scripted live meeting** with fictional PRD names (09 section 4.6). It is reproducible, safe for any provider, and tuned to show traceability. | A real meeting risks a weak brief, exposes real data, and can't be rehearsed. |

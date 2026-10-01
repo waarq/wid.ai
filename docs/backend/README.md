@@ -2,6 +2,8 @@
 
 Status: draft v1, 2026-10-01. Scope: everything needed for the real backend to replace the mock services in `src/services/mock` without UI rewrites, while keeping the PRD's two hard rules: **manual capture only** and **every insight traceable to a meeting, a transcript segment and a timestamp**.
 
+> **Demo slice first (owner decision, 2026-10-01).** The next build is an **investor-ready demo slice on free tiers only**, not M0 to M10. It covers real Google sign-in and read-only Calendar, live Chrome tab and mic capture to a real transcript, a real traceable AI brief (verification gate kept), Ask-the-meeting and search. Everything else stays mocked behind the service registry. The slice uses Supabase Free, one Render free web service running the API and worker in one process, Groq Whisper for ASR, Cerebras/Groq `gpt-oss-120b` for extraction, Cloudflare Workers AI as fallback, and Postgres FTS with no vectors. It is about 5 engineer-weeks plus 1 week of buffer (the D-track in [07-roadmap.md](./07-roadmap.md) section 1a). Read [09-demo-slice-free-stack.md](./09-demo-slice-free-stack.md) first. Files 01 to 08 remain the long-term target; 09 section 7 lists what the slice defers from each.
+
 ## Reading order
 
 | # | File | Read it for |
@@ -13,9 +15,10 @@ Status: draft v1, 2026-10-01. Scope: everything needed for the real backend to r
 | 5 | [05-capture-and-pipeline.md](./05-capture-and-pipeline.md) | How audio gets in; FFmpeg, Whisper, diarization, LLM extraction, verification, RAG and search |
 | 6 | [06-integrations.md](./06-integrations.md) | Google Calendar (sync, push channels, verification), Zoom (OAuth, webhooks, import), extension points |
 | 7 | [07-roadmap.md](./07-roadmap.md) | M0 to M10 milestones, cutover plan, testing, CI/CD, cost model, risk register |
-| 8 | [08-open-questions.md](./08-open-questions.md) | Decisions the owner must make, each with a recommendation |
+| 8 | [08-open-questions.md](./08-open-questions.md) | Decisions the owner must make, each with a recommendation, and which ones the demo slice resolves or defers |
+| 9 | [09-demo-slice-free-stack.md](./09-demo-slice-free-stack.md) | **Build this first.** Free-stack selection with verified limits, privacy rules for free AI tiers, the simplified slice architecture, per-service scope, trimmed migrations, capture and pipeline, the wow-path script, frontend cutover, week plan and risks |
 
-Short on time? Read this page, then [05](./05-capture-and-pipeline.md) sections 1 and 6, then [08](./08-open-questions.md).
+Short on time? Read this page, then [09](./09-demo-slice-free-stack.md), then [05](./05-capture-and-pipeline.md) sections 1 and 6, then [08](./08-open-questions.md).
 
 ## One-page summary
 
@@ -55,6 +58,8 @@ Short on time? Read this page, then [05](./05-capture-and-pipeline.md) sections 
 **Cost** (rough). About $65 to 210/month at 100 meetings, $280 to 1,020 at 1k, and $1.8k to 7.6k at 10k, depending on hosted vs self-hosted AI ([07-roadmap.md](./07-roadmap.md) section 6).
 
 ## Frontend changes this plan requires (all small, mostly additive)
+
+The demo slice needs only a subset of these, with `src/contracts` in place of `packages/contracts`. See [09-demo-slice-free-stack.md](./09-demo-slice-free-stack.md) section 5 for the ordered checklist.
 
 | Change | Where | Milestone |
 | --- | --- | --- |

@@ -1,6 +1,24 @@
 # 07. Roadmap, testing, CI/CD, cost model, risks
 
-Status: draft v1. Effort is in **engineer-weeks for one senior full-stack/backend engineer**, including the matching `Api*Service` work in the frontend. With two engineers, the critical path is about 18 to 20 calendar weeks, because M3 can run alongside M4, M7 alongside parts of M6, and M8 alongside M9.
+Status: draft v1. **The D-track demo slice (section 1a) now comes before M0**, per the owner's 2026-10-01 decision. M0 to M10 remain the long-term plan. Effort is in **engineer-weeks for one senior full-stack/backend engineer**, including the matching `Api*Service` work in the frontend. With two engineers, the critical path is about 18 to 20 calendar weeks, because M3 can run alongside M4, M7 alongside parts of M6, and M8 alongside M9.
+
+## 1a. D-track: investor demo slice (runs before M0)
+
+Owner decision (2026-10-01): build an investor-ready demo slice on free tiers first. The design, verified limits and scope are in [09-demo-slice-free-stack.md](./09-demo-slice-free-stack.md). Effort is for **one engineer**: about **5 weeks plus 1 week of buffer**. Everything not listed stays on `Mock*` services.
+
+| Milestone | Weeks | Scope | Exit criteria |
+| --- | --- | --- | --- |
+| **D0. Spike and accounts** | 0.5 | Supabase Free project, Render free service, Groq (ZDR on), Cerebras and Cloudflare keys. Three-track Chrome capture spike. Groq transcription by `url`. Cerebras strict-schema test. Record the `wow` golden. | The capture spike works on the owner's laptop with a Meet tab; mic/tab drift is measured; the remuxed WebM seeks; Groq and Cerebras calls succeed; every [unverified] item in 09 sections 1 and 4 is resolved or re-tagged. |
+| **D1. Skeleton, auth, onboarding, settings** | 1 | `api/` Fastify (config, JWKS, error contract, health), migrations 1 to 4, 13, 14 (bootstrap), 16. `ApiAuth/User/Onboarding/SettingsService`, registry per-service mode, `http-errors` change, `proxy.ts` on claims. | Real Google sign-in through onboarding to My Calls on the deployed demo stack. |
+| **D2. Calendar and meetings read** | 1 | Pull-on-read calendar, integrations-lite, meetings CRUD (Real-lite), transcript and action-item reads. | The calendar shows real events within 2 minutes of connecting; a hand-seeded meeting renders fully from the API. |
+| **D3. Capture, jobs, ASR** | 1 | Capture endpoints, `ops.jobs` loop, assemble + remux, Groq ASR fan-out, segment build, provider router with usage ledger and 429 handling, `BrowserRecorder` with IndexedDB queue. | A 20-minute live capture with one reload mid-way produces a correct two-speaker transcript that plays and seeks. |
+| **D4. Brief and traceability** | 1 | Extract, reduce, verify (gate unchanged from 05 s6.8), finalize, `meeting_ready` alert, alerts-lite, pgTAP traceability tests. | The `wow` eval checklist (09 s4.7) passes 4 of 5 runs; stop-to-ready under 3 min; 100% of persisted insights pass the DB traceability constraints. |
+| **D5. Ask, search, demo mode** | 0.5 | Ask (FTS windows + deterministic fallback), suggestions, history, `api.search_all` (FTS), `replay-golden`, replay providers, seeded meeting, quota panel, keep-warm. | The full wow path runs 3 times in a row on the deployed stack; replay mode produces the same brief. |
+| **Buffer and pilot** | 1 | Golden variants, rehearsals, 3 to 5 pilot test users, screen recording of a successful run. | The demo-day checklist (09 s2.5) is rehearsed twice. |
+
+**Cut lines** (cut from the top when behind): follow-up generation, then alerts-lite, then settings updates, then search over decisions and actions, then Ask history and suggestions, then calendar-linked capture. **Never cut:** the verification gate and DB traceability constraints, owner RLS, the golden replay safety net, real sign-in, real capture to transcript, and a real brief.
+
+**Relation to M0 to M10:** the D-track reuses the migrations, contracts and `Api*Service`s it builds. When the full plan resumes, M0 starts with the monorepo move (Q13) and the dropped components listed in 09 section 2.2. M1, M2 (meetings and RLS parts), M4 and M6 are partly done by then, so re-estimate them at that point rather than subtracting weeks now.
 
 ## 1. Milestones
 
@@ -177,3 +195,5 @@ Takeaways:
 | R16 | Audio loss on crash or chunk corruption | M | H | IndexedDB-first buffering, parts rotation, contiguity check, "process what was captured", chunks retained 24 h | Any reported loss: postmortem |
 | R17 | Prompt injection via transcript content | M | L-M | No tools or actions for the LLM, schema-only outputs, verification, instruction to treat the transcript as data | Detected injection pattern in eval or a report |
 | R18 | Google Limited Use / DPA compliance when hosted LLMs see calendar-derived data | M | M | Prefer self-hosted for calendar-derived context, or vendors with no-training terms. Legal review. | Before enabling hosted providers in prod |
+
+Risks specific to the free-tier demo slice (quota exhaustion, cold starts, project pausing, provider changes, Testing-mode token expiry, free-tier data use) are F1 to F11 in [09-demo-slice-free-stack.md](./09-demo-slice-free-stack.md) section 6.2.
