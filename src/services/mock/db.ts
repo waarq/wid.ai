@@ -240,7 +240,9 @@ function buildSeed(data: MockData): Seed {
     calendarEvents: seed.calendarEvents,
     integrations: seed.integrations,
     settings: seed.settings,
-    onboarding: { ...seed.onboarding, completed: true, currentStep: "zoom" },
+    // The demo account is already onboarded. A real sign-in has no hint cookie
+    // to say otherwise, so it starts from the fresh first-sign-in progress.
+    onboarding: isRealAuth ? seed.onboarding : { ...seed.onboarding, completed: true, currentStep: "zoom" },
     assistantHistory: {},
     capture: null,
   }
@@ -254,6 +256,7 @@ function buildSeed(data: MockData): Seed {
     data.alerts.length,
     data.deals.length,
     data.playlistItems.length,
+    isRealAuth ? "real-auth" : "mock-auth",
   ].join("|")
 
   return { state, statics, key: hash(signature) }
