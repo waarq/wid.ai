@@ -2,6 +2,7 @@ import { differenceInCalendarDays } from "date-fns"
 
 import { readClientSessionStage } from "@/lib/auth/client-session"
 import { AppException } from "@/lib/utils/errors"
+import { isRealAuth } from "@/services/modes"
 import type * as MockDataModule from "@/mock-data"
 import type { PersonProfile } from "@/mock-data"
 import type { CaptureSession } from "@/store/capture-machine"
@@ -398,6 +399,9 @@ export class MockDb {
   }
 
   requireSignedIn(): void {
+    // Real auth (mixed mode): the hint cookie is never set, and proxy.ts has
+    // already gated the route on the verified Supabase JWT.
+    if (isRealAuth) return
     if (this.stage === "unauthenticated") throw new AppException("unauthorized")
   }
 
