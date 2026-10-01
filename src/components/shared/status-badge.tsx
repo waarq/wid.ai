@@ -1,20 +1,9 @@
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import type { MeetingStatus } from "@/types"
 
-/**
- * Local status union. Phase 1 should swap this for the canonical type
- * from `@/types` once wired.
- */
-export type StatusBadgeStatus =
-  | "upcoming"
-  | "ready_to_capture"
-  | "capturing"
-  | "paused"
-  | "processing"
-  | "transcribing"
-  | "understanding"
-  | "ready"
-  | "failed"
+/** Canonical server-side meeting lifecycle from `@/types`. */
+export type StatusBadgeStatus = MeetingStatus
 
 type Tone = "muted" | "success" | "warning" | "info" | "danger"
 

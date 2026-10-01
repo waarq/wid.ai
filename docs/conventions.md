@@ -99,3 +99,40 @@ Every AI-generated insight extends `Traceable { meetingId, sourceSegmentId, sour
 
 - No secrets in code or `NEXT_PUBLIC_*`. No credentials in `localStorage`. Sessions use backend httpOnly cookies, and the fetch adapter sends `credentials: "include"`. For header auth, register a token source with `setAuthTokenProvider`, which keeps the token in memory or the auth SDK.
 - Client state and proxy redirects are only UX. Treat backend authorization as authoritative.
+
+## 10. Phase 1: data layer (mock services, hooks, stores, routing)
+
+### Where things are
+
+| Path | What |
+| --- | --- |
+| `src/services/mock/` | `Mock*Service` for every interface, sharing one `MockDb` (`db.ts`). `runtime.ts` wraps every call: latency, failure injection, deep clone, AppException-only errors. |
+| `src/services/mock/db.ts` | Lazy seed from `src/mock-data` via dynamic import (API mode never downloads fixtures). Fixture dates are rebased so `MOCK_NOW` maps to "now" (off when `NODE_ENV=test`). Writes snapshot to `sessionStorage` (`wit-mock-db`), so a refresh keeps demo state. |
+| `src/services/mock/generators.ts` | Transcript + traceable summary for captured meetings (internal or customer template, scaled to the captured length). |
+| `src/services/mock/assistant-engine.ts`, `search-engine.ts` | Deterministic intent/keyword scoring for "Ask this meeting" and ranked global search. |
+| `src/hooks/` | One file per domain plus the `index.ts` barrel. Optimistic updates with rollback for action toggles, alert read state, playlist and settings. |
+| `src/store/` | `capture-machine.ts` (pure machine), `capture-store.ts`, `onboarding-store.ts`, `preferences-store.ts`, `storage.ts`, `hydration.ts`. Persisted stores use `skipHydration`. Call `useStoreHydration(store)` before reading persisted values. |
+| `src/lib/auth/` | Routing hint cookie (`wit_session_hint`, value `v1.<stage>`, no secrets), route rules (`resolveRouteAccess`), client cookie writers and a server reader (`server-session.ts`, import it directly). |
+| `src/proxy.ts` | Three-state route guard. This is mock gating only, and the backend authorizes every request. |
+
+### Behaviour notes
+
+- Capture: `useCaptureController()` drives the flow. After Stop, the meeting moves processing, then transcribing, then understanding, then ready. Each phase takes 2.5s by default and is driven by time since stop, so navigation and refresh are safe. A `meeting_ready` alert is created when it finishes. A failed meeting's Retry regenerates content.
+- Access rules: the owner, an explicit share (the seeded `sharedWithMe` flag or an invite), `team` visibility, or `attendees` visibility when the user is a participant. `sharedWithMe` is computed for each viewer. `stats.actionItems` counts only open and in-progress items.
+- Search returns command results unless `types` excludes `"command"`. The palette should not add its own duplicates.
+- Seeded processing meetings (Sprint Planning, "understanding") have no processing plan and stay in that status by design.
+
+### Demo controls (mock mode only)
+
+URL flags: `?mockFail=meetings.list[:code][,alerts.*]`, `?mockFail=*`, `?mockLatency=0|slow|800|300-900`, `?mockProcessing=fail`.
+Console: `window.__WIT_MOCK__.fail(op, code, { times })`, `.clearFailures()`, `.setLatency(min, max)`, `.failNextProcessing()`, `.failActiveCapture()`, `.setProcessingPhaseMs(ms)`, `await .reset()`. Operation names are `<registryKey>.<method>`, for example `actionItems.toggleComplete`.
+
+### Continue from here (status at the end of Phase 1)
+
+- Done: every mock service, the registry wiring, all hooks, the stores, proxy and auth helpers, and the StatusBadge type swap. `tsc`, `eslint` and the end-to-end script (70 checks) pass.
+- Not done or open:
+  1. No unit tests in the repo, because there is no test framework. The pure functions are ready for tests: `transition`, `getElapsedMs`, `resolveRouteAccess`, `getSafeNextPath`, `sanitizeDraft`, `answerQuestion` and `runSearch`.
+  2. The mock data has no "Confirm launch checklist" action. Searching "launch" returns "Send the final launch date to leadership". The captured-meeting template does contain "Confirm launch checklist".
+  3. Nothing has exercised the hooks in a running UI yet, because Phase 2+ screens don't exist.
+  4. `AppProviders` only rehydrates `useUIStore`. The other stores rehydrate through `useStoreHydration` in the screens that use them.
+- To re-run the service checks, run a Node script that imports `src/services/index.ts` through `jiti` with the `@` alias pointed at `src`, under `NODE_ENV=test`. The Phase 1 script lived in the agent scratchpad and was not committed.

@@ -1,5 +1,7 @@
 import { AppException } from "@/lib/utils/errors"
 
+import { mockServiceFactories } from "./mock"
+
 import type {
   ActionItemService,
   AlertService,
@@ -49,6 +51,9 @@ export type ServiceFactories = { [K in ServiceName]: () => ServiceRegistry[K] }
 /**
  * SWITCH: NEXT_PUBLIC_USE_MOCKS=false uses the Api* services; anything else
  * (including unset) uses the Mock* services. Read literally so Next.js inlines it.
+ *
+ * Mock fixtures are loaded with a dynamic import on first use, so API mode
+ * never downloads them.
  */
 export const serviceMode: ServiceMode = process.env.NEXT_PUBLIC_USE_MOCKS === "false" ? "api" : "mock"
 
@@ -65,7 +70,8 @@ export const serviceMode: ServiceMode = process.env.NEXT_PUBLIC_USE_MOCKS === "f
  * than silently falling back to the other mode.
  */
 const serviceFactories: Record<ServiceMode, Partial<ServiceFactories>> = {
-  mock: {},
+  mock: mockServiceFactories,
+  // Api* services land with the backend; until then every slot throws service_unavailable.
   api: {},
 }
 
