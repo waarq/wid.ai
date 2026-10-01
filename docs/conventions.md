@@ -1,4 +1,4 @@
-# WIT frontend conventions
+# WID (Wrote It Down) frontend conventions
 
 Read this before writing code. The PRD (`PRD.md`) decides product and stack questions; this file covers how we build.
 
@@ -93,7 +93,7 @@ Every AI-generated insight extends `Traceable { meetingId, sourceSegmentId, sour
 - **Surfaces**: prefer hairline 1px dividers over cards. Keep radii small (6 to 8px). Avoid generic card grids and rows of three equal cards. Avoid heavy shadows, glass effects and gradients.
 - **States**: use skeleton loaders, not spinners, for page and section loads. Every interactive element gets tactile `:active` feedback, for example a subtle `active:scale-[0.98]`. Every important interaction has loading, empty, error and success states.
 - **Layout**: use `min-h-[100dvh]`, never `h-screen`. Use CSS grid instead of flexbox percentage math. Support 320px to 1920px. Tables turn into cards on mobile.
-- **Demo names**: use only the PRD's fictional companies: Northstar Labs, Vertex Digital, Atlas Properties, Crescent Health and **Meridian Freight** (replacing "Acme"). Never use "Acme". People come from the PRD list (Ahmed Khan, Ayesha Malik, Hamza Siddiqui, Sara Ahmed, Usman Raza, Fatima Noor, Ali Hassan, Hira Shah) plus the demo user Waleed Ahmed (`waleed@wit-demo.com`). Label demo content as demo.
+- **Demo names**: use only the PRD's fictional companies: Northstar Labs, Vertex Digital, Atlas Properties, Crescent Health and **Meridian Freight** (replacing "Acme"). Never use "Acme". People come from the PRD list (Ahmed Khan, Ayesha Malik, Hamza Siddiqui, Sara Ahmed, Usman Raza, Fatima Noor, Ali Hassan, Hira Shah) plus the demo user Waleed Ahmed (`waleed@wid-demo.com`). Label demo content as demo.
 
 ## 9. Security
 
@@ -107,12 +107,12 @@ Every AI-generated insight extends `Traceable { meetingId, sourceSegmentId, sour
 | Path | What |
 | --- | --- |
 | `src/services/mock/` | `Mock*Service` for every interface, sharing one `MockDb` (`db.ts`). `runtime.ts` wraps every call: latency, failure injection, deep clone, AppException-only errors. |
-| `src/services/mock/db.ts` | Lazy seed from `src/mock-data` via dynamic import (API mode never downloads fixtures). Fixture dates are rebased so `MOCK_NOW` maps to "now" (off when `NODE_ENV=test`). Writes snapshot to `sessionStorage` (`wit-mock-db`), so a refresh keeps demo state. |
+| `src/services/mock/db.ts` | Lazy seed from `src/mock-data` via dynamic import (API mode never downloads fixtures). Fixture dates are rebased so `MOCK_NOW` maps to "now" (off when `NODE_ENV=test`). Writes snapshot to `sessionStorage` (`wid-mock-db`), so a refresh keeps demo state. |
 | `src/services/mock/generators.ts` | Transcript + traceable summary for captured meetings (internal or customer template, scaled to the captured length). |
 | `src/services/mock/assistant-engine.ts`, `search-engine.ts` | Deterministic intent/keyword scoring for "Ask this meeting" and ranked global search. |
 | `src/hooks/` | One file per domain plus the `index.ts` barrel. Optimistic updates with rollback for action toggles, alert read state, playlist and settings. |
 | `src/store/` | `capture-machine.ts` (pure machine), `capture-store.ts`, `onboarding-store.ts`, `preferences-store.ts`, `storage.ts`, `hydration.ts`, `persisted.ts`. See "Persisted stores" below. |
-| `src/lib/auth/` | Routing hint cookie (`wit_session_hint`, value `v1.<stage>`, no secrets), route rules (`resolveRouteAccess`), client cookie writers and a server reader (`server-session.ts`, import it directly). |
+| `src/lib/auth/` | Routing hint cookie (`wid_session_hint`, value `v1.<stage>`, no secrets), route rules (`resolveRouteAccess`), client cookie writers and a server reader (`server-session.ts`, import it directly). |
 | `src/proxy.ts` | Three-state route guard. This is mock gating only, and the backend authorizes every request. |
 | `vitest.config.mts`, `**/*.test.ts` | Unit and service tests (Vitest 4, Node environment, `@` alias, `NODE_ENV=test`). `npm test` watches, `npm run test:run` runs once. |
 
@@ -142,7 +142,7 @@ Every AI-generated insight extends `Traceable { meetingId, sourceSegmentId, sour
 ### Demo controls (mock mode only)
 
 URL flags: `?mockFail=meetings.list[:code][,alerts.*]`, `?mockFail=*`, `?mockLatency=0|slow|800|300-900`, `?mockProcessing=fail`.
-Console: `window.__WIT_MOCK__.fail(op, code, { times })`, `.clearFailures()`, `.setLatency(min, max)`, `.failNextProcessing()`, `.failActiveCapture()`, `.setProcessingPhaseMs(ms)`, `await .reset()`. Operation names are `<registryKey>.<method>`, for example `actionItems.toggleComplete`.
+Console: `window.__WID_MOCK__.fail(op, code, { times })`, `.clearFailures()`, `.setLatency(min, max)`, `.failNextProcessing()`, `.failActiveCapture()`, `.setProcessingPhaseMs(ms)`, `await .reset()`. Operation names are `<registryKey>.<method>`, for example `actionItems.toggleComplete`.
 
 ### Continue from here (status after the Phase 1 close-out)
 

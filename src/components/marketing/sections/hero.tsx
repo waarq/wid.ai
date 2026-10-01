@@ -25,10 +25,10 @@ export function Hero() {
             id="hero-title"
             className="text-[clamp(1.875rem,1rem+2.4vw,3rem)] leading-[1.06] font-semibold tracking-tight"
           >
-            Meetings are where work happens. WIT remembers what happened.
+            Meetings are where work happens. WID remembers what happened.
           </h1>
           <p className="mt-6 max-w-lg text-base leading-relaxed text-pretty text-muted-foreground md:text-lg">
-            WIT captures your meetings, understands the conversation, and turns it into clear notes,
+            WID captures your meetings, understands the conversation, and turns it into clear notes,
             decisions, action items and searchable knowledge.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">

@@ -6,7 +6,7 @@ import { APP_ERROR_CODES, type AppError, type AppErrorCode, type AppErrorDetails
  * Raw backend messages are never shown.
  */
 export const USER_SAFE_MESSAGES: Record<AppErrorCode, string> = {
-  network_error: "We couldn't reach WIT. Check your connection and try again.",
+  network_error: "We couldn't reach WID. Check your connection and try again.",
   timeout: "This is taking longer than expected. Please try again.",
   cancelled: "The request was cancelled.",
   unauthorized: "Your session has ended. Please sign in again.",

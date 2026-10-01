@@ -20,7 +20,7 @@ export interface StepMeta {
 }
 
 export const STEP_META: Record<OnboardingStep, StepMeta> = {
-  email_type: { step: "email_type", label: "How you'll use WIT", number: null, badge: "Getting started" },
+  email_type: { step: "email_type", label: "How you'll use WID", number: null, badge: "Getting started" },
   calendar: { step: "calendar", label: "Calendar", number: 1 },
   capture: { step: "capture", label: "Meeting capture", number: 2 },
   sharing: { step: "sharing", label: "Sharing", number: 3 },

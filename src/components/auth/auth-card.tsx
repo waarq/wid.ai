@@ -19,12 +19,12 @@ const COPY = {
       </>
     ),
     lead: "Sign in to pick up where your last meeting left off.",
-    switchText: "New to WIT?",
+    switchText: "New to WID?",
     switchLabel: "Create an account",
     switchHref: "/register",
   },
   register: {
-    title: "Create your WIT account",
+    title: "Create your WID account",
     lead: "Notes, decisions and follow-ups from the meetings you choose to capture.",
     switchText: "Already have an account?",
     switchLabel: "Sign in",
@@ -50,7 +50,7 @@ export function AuthCard({ intent, next }: AuthCardProps) {
         <GoogleSignIn intent={intent} next={next} />
         <div className="border-t border-border" />
         <p className="text-sm text-muted-foreground">
-          By continuing, you agree to WIT&apos;s{" "}
+          By continuing, you agree to WID&apos;s{" "}
           <Link href="/terms" className="text-foreground underline underline-offset-4 hover:text-primary">
             Terms
           </Link>{" "}

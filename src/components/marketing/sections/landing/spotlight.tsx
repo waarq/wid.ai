@@ -24,7 +24,7 @@ export function Spotlight({ items }: { items: SpotlightItem[] }) {
   return (
     <LazyMotion features={domAnimation} strict>
       <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
-        <div role="tablist" aria-label="What WIT gives you" className="flex flex-col gap-2">
+        <div role="tablist" aria-label="What WID gives you" className="flex flex-col gap-2">
           {items.map((item) => {
             const on = item.id === activeId
             return (

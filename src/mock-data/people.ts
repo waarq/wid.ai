@@ -21,11 +21,11 @@ export interface PersonProfile {
   isExternal: boolean
   team?: string
   jobFunction?: JobFunction
-  /** Set for WIT users in the demo workspace. */
+  /** Set for WID users in the demo workspace. */
   userId?: string
 }
 
-const INTERNAL_COMPANY = "WIT Demo Workspace"
+const INTERNAL_COMPANY = "WID Demo Workspace"
 
 const profiles = {
   waleed: {
@@ -33,7 +33,7 @@ const profiles = {
     name: "Waleed Ahmed",
     firstName: "Waleed",
     lastName: "Ahmed",
-    email: "waleed@wit-demo.com",
+    email: "waleed@wid-demo.com",
     title: "Senior Engineer",
     company: INTERNAL_COMPANY,
     isExternal: false,
@@ -46,7 +46,7 @@ const profiles = {
     name: "Sara Ahmed",
     firstName: "Sara",
     lastName: "Ahmed",
-    email: "sara.ahmed@wit-demo.com",
+    email: "sara.ahmed@wid-demo.com",
     title: "Product Designer",
     company: INTERNAL_COMPANY,
     isExternal: false,
@@ -59,7 +59,7 @@ const profiles = {
     name: "Ahmed Khan",
     firstName: "Ahmed",
     lastName: "Khan",
-    email: "ahmed.khan@wit-demo.com",
+    email: "ahmed.khan@wid-demo.com",
     title: "Head of Engineering",
     company: INTERNAL_COMPANY,
     isExternal: false,
@@ -72,7 +72,7 @@ const profiles = {
     name: "Ayesha Malik",
     firstName: "Ayesha",
     lastName: "Malik",
-    email: "ayesha.malik@wit-demo.com",
+    email: "ayesha.malik@wid-demo.com",
     title: "Product Manager",
     company: INTERNAL_COMPANY,
     isExternal: false,
@@ -85,7 +85,7 @@ const profiles = {
     name: "Hamza Siddiqui",
     firstName: "Hamza",
     lastName: "Siddiqui",
-    email: "hamza.siddiqui@wit-demo.com",
+    email: "hamza.siddiqui@wid-demo.com",
     title: "Backend Engineer",
     company: INTERNAL_COMPANY,
     isExternal: false,
@@ -98,7 +98,7 @@ const profiles = {
     name: "Ali Hassan",
     firstName: "Ali",
     lastName: "Hassan",
-    email: "ali.hassan@wit-demo.com",
+    email: "ali.hassan@wid-demo.com",
     title: "Account Executive",
     company: INTERNAL_COMPANY,
     isExternal: false,
@@ -190,7 +190,7 @@ export function personKeyById(id: string): PersonKey | undefined {
 /** Demo account. Fictional; labelled as demo data in the UI. */
 export const currentUser: User = {
   id: "usr_waleed",
-  email: "waleed@wit-demo.com",
+  email: "waleed@wid-demo.com",
   firstName: "Waleed",
   lastName: "Ahmed",
   emailType: "company",
@@ -213,7 +213,7 @@ export const users: User[] = [currentUser]
 
 /** Accounts shown in the mock Google account chooser. */
 export const googleAccounts: GoogleAccountOption[] = [
-  { id: "gacc_work", name: "Waleed Ahmed", email: "waleed@wit-demo.com" },
+  { id: "gacc_work", name: "Waleed Ahmed", email: "waleed@wid-demo.com" },
   { id: "gacc_personal", name: "Waleed Ahmed", email: "waleed.personal@gmail.com" },
 ]
 

@@ -18,7 +18,7 @@ export function ShortcutsDialog({ open, onOpenChange }: { open: boolean; onOpenC
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Keyboard shortcuts</DialogTitle>
-          <DialogDescription>Move around WIT without leaving the keyboard.</DialogDescription>
+          <DialogDescription>Move around WID without leaving the keyboard.</DialogDescription>
         </DialogHeader>
         <ul className="divide-y divide-border text-sm">
           {KEYBOARD_SHORTCUTS.map((shortcut) => (

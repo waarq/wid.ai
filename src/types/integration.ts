@@ -35,7 +35,7 @@ export interface IntegrationOf<P extends IntegrationProvider> {
   provider: P
   category: IntegrationCategory
   status: IntegrationStatus
-  /** Connected account label, e.g. "waleed@wit-demo.com". */
+  /** Connected account label, e.g. "waleed@wid-demo.com". */
   accountLabel?: string
   connectedAt?: ISODateString
   /** null when disconnected or not configurable. */

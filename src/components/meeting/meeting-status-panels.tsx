@@ -33,7 +33,7 @@ export function ProcessingPanel({ meeting }: { meeting: Meeting }) {
           Processing your meeting…
         </h2>
         <p className="text-sm text-muted-foreground">
-          WIT is turning the conversation into a brief, decisions and action items. You can leave this page; we&apos;ll
+          WID is turning the conversation into a brief, decisions and action items. You can leave this page; we&apos;ll
           let you know when it&apos;s ready.
         </p>
       </div>

@@ -19,9 +19,9 @@ Your task is to design and generate a **complete, immediately runnable frontend 
 
 # PRODUCT
 
-**WIT**
+**WID** (short for **Wrote It Down**)
 
-WIT is an AI meeting intelligence platform inspired by products such as Fathom.
+WID is an AI meeting intelligence platform inspired by products such as Fathom.
 
 The product captures meetings, turns conversations into structured notes, transcripts, decisions and action items, and makes the information searchable and useful after the meeting.
 
@@ -42,7 +42,7 @@ The experience should feel like a real product.
 
 # PRIMARY PRODUCT PROMISE
 
-WIT turns meetings into something useful immediately.
+WID turns meetings into something useful immediately.
 
 The product should communicate:
 
@@ -50,7 +50,7 @@ The product should communicate:
 
 Supporting positioning:
 
-> WIT captures your conversations, understands what happened, and turns meetings into decisions, action items and searchable knowledge.
+> WID captures your conversations, understands what happened, and turns meetings into decisions, action items and searchable knowledge.
 
 The core product loop is:
 
@@ -92,7 +92,7 @@ The useful output is:
 
 # IMPORTANT PRODUCT PRINCIPLE
 
-Do not build WIT as a simple "AI meeting recorder."
+Do not build WID as a simple "AI meeting recorder."
 
 Build it as:
 
@@ -159,7 +159,7 @@ The user should be able to complete this entire journey without dead ends.
 
 # IMPORTANT CAPTURE PRINCIPLE
 
-WIT should **not automatically schedule, join, record or capture every calendar meeting by default**.
+WID should **not automatically schedule, join, record or capture every calendar meeting by default**.
 
 The user explicitly wants:
 
@@ -169,10 +169,10 @@ Therefore:
 
 * Calendar is connected for context.
 * Calendar meetings are displayed.
-* WIT knows which meetings exist.
-* WIT does NOT automatically start recording.
-* WIT does NOT automatically join meetings.
-* WIT does NOT silently capture meetings.
+* WID knows which meetings exist.
+* WID does NOT automatically start recording.
+* WID does NOT automatically join meetings.
+* WID does NOT silently capture meetings.
 * The user manually chooses when to capture.
 
 The UI should clearly communicate this.
@@ -182,7 +182,7 @@ Example:
 ```text
 Your calendar is connected.
 
-WIT can see your upcoming meetings,
+WID can see your upcoming meetings,
 but nothing will be recorded automatically.
 
 You decide when to capture.
@@ -194,7 +194,7 @@ You decide when to capture.
 
 # CAPTURE MODEL
 
-WIT should support a conceptual capture architecture that can later be connected to real backend/capture infrastructure.
+WID should support a conceptual capture architecture that can later be connected to real backend/capture infrastructure.
 
 Frontend states:
 
@@ -252,7 +252,7 @@ Meeting ready
 
 # PRODUCT AREAS
 
-The authenticated WIT portal should contain:
+The authenticated WID portal should contain:
 
 ```text
 My Calls
@@ -301,7 +301,7 @@ Routes:
  /contact
 ```
 
-The landing page must explain WIT within seconds.
+The landing page must explain WID within seconds.
 
 ---
 
@@ -310,7 +310,7 @@ The landing page must explain WIT within seconds.
 Desktop navbar:
 
 ```text
-WIT
+WID
 
 Product
 Solutions
@@ -324,7 +324,7 @@ Get started
 Mobile:
 
 ```text
-WIT
+WID
 ☰
 ```
 
@@ -349,7 +349,7 @@ Eyebrow:
 
 Headline:
 
-> **Meetings are where work happens. WIT remembers what happened.**
+> **Meetings are where work happens. WID remembers what happened.**
 
 Alternative headline direction:
 
@@ -357,7 +357,7 @@ Alternative headline direction:
 
 Supporting copy:
 
-> WIT captures your meetings, understands the conversation, and turns it into clear notes, decisions, action items and searchable knowledge.
+> WID captures your meetings, understands the conversation, and turns it into clear notes, decisions, action items and searchable knowledge.
 
 Primary CTA:
 
@@ -444,12 +444,12 @@ Show the common problems:
 * Teams repeat the same conversations.
 * Meeting recordings become unread archives.
 
-Then introduce WIT:
+Then introduce WID:
 
 ```text
 Conversation
       ↓
-WIT understands it
+WID understands it
       ↓
 Decision
 Action
@@ -466,7 +466,7 @@ Create four steps.
 
 ## 01 — Connect your calendar
 
-Connect Google Calendar so WIT understands your meeting schedule.
+Connect Google Calendar so WID understands your meeting schedule.
 
 Important:
 
@@ -482,9 +482,9 @@ No automatic recording by default.
 
 ---
 
-## 03 — WIT understands the conversation
+## 03 — WID understands the conversation
 
-After the meeting, WIT produces:
+After the meeting, WID produces:
 
 * transcript
 * summary
@@ -596,7 +596,7 @@ Ask this meeting...
 
 "What did we decide about the launch?"
 
-WIT
+WID
 
 The team agreed to launch on October 15.
 
@@ -659,7 +659,7 @@ Oct 1
 Launch → Oct 15
 ```
 
-WIT should make it possible to understand how decisions changed over time.
+WID should make it possible to understand how decisions changed over time.
 
 ---
 
@@ -739,7 +739,7 @@ The prototype may use a mock implementation.
 Design:
 
 ```text
-WIT
+WID
 
 Your meetings,
 understood.
@@ -761,7 +761,7 @@ Don't show unnecessary email/password fields if Google is the only authenticatio
 Same Google-first experience.
 
 ```text
-Create your WIT account
+Create your WID account
 
 Continue with Google
 ```
@@ -771,7 +771,7 @@ After Google account selection:
 ```text
 Welcome, Waleed.
 
-Let's set up WIT.
+Let's set up WID.
 ```
 
 ---
@@ -796,7 +796,7 @@ Select an account
 [Use another account]
 ```
 
-The selected identity becomes the initial WIT profile.
+The selected identity becomes the initial WID profile.
 
 ---
 
@@ -804,18 +804,18 @@ The selected identity becomes the initial WIT profile.
 
 Immediately after Google authentication ask:
 
-> **How will you use WIT?**
+> **How will you use WID?**
 
 ```text
 Which email did you use?
 
 ○ My company's email
 
-  I'm using WIT for work and team meetings.
+  I'm using WID for work and team meetings.
 
 ○ My personal email
 
-  I'm using WIT for my own meetings and projects.
+  I'm using WID for my own meetings and projects.
 ```
 
 This selection must affect onboarding and account metadata.
@@ -841,7 +841,7 @@ After authentication and email type:
 ```text
 Connect your calendar
 
-WIT uses your calendar to understand
+WID uses your calendar to understand
 which meetings you have coming up.
 
 Google Calendar
@@ -851,7 +851,7 @@ Google Calendar
 
 Important explanation:
 
-> WIT will not automatically record your meetings. You choose when to capture.
+> WID will not automatically record your meetings. You choose when to capture.
 
 After mocked connection:
 
@@ -878,14 +878,14 @@ But make the value of connecting clear.
 Before connecting:
 
 ```text
-What WIT needs access to
+What WID needs access to
 
 ✓ View your calendar events
 ✓ Read meeting titles
 ✓ Read meeting times
 ✓ Read attendee information
 
-WIT does not automatically record
+WID does not automatically record
 your calendar meetings.
 ```
 
@@ -902,7 +902,7 @@ It should feel substantially different from the main dashboard.
 Use:
 
 ```text
-WIT logo
+WID logo
 
 Step 2 of 6
 
@@ -937,7 +937,7 @@ If calendar wasn't already connected:
 ```text
 Connect Google Calendar
 
-Bring your meetings into WIT.
+Bring your meetings into WID.
 
 [Connect calendar]
 
@@ -958,14 +958,14 @@ If connected:
 
 Ask:
 
-> **Which meetings should WIT take notes on?**
+> **Which meetings should WID take notes on?**
 
 Options:
 
 ```text
 ○ All calendar meetings
 
-  WIT will make every meeting available
+  WID will make every meeting available
   for manual capture.
 
 ○ Selected meetings
@@ -975,7 +975,7 @@ Options:
 
 ○ I'll choose manually
 
-  WIT will never automatically capture.
+  WID will never automatically capture.
   I'll start each meeting myself.
 ```
 
@@ -985,7 +985,7 @@ Default:
 
 The UI must explicitly explain:
 
-> Your calendar helps WIT understand your schedule. It does not mean WIT automatically records your meetings.
+> Your calendar helps WID understand your schedule. It does not mean WID automatically records your meetings.
 
 ---
 
@@ -1029,7 +1029,7 @@ Privacy should be the safer initial state.
 
 Ask:
 
-> **What should WIT pay attention to?**
+> **What should WID pay attention to?**
 
 Create selectable cards.
 
@@ -1125,7 +1125,7 @@ This preference should later personalize:
 Ask:
 
 ```text
-Personalize your WIT
+Personalize your WID
 
 What should we call you?
 
@@ -1136,7 +1136,7 @@ What timezone are you in?
 
 Asia/Karachi
 
-What do you want WIT to help you with?
+What do you want WID to help you with?
 
 ☐ Remember decisions
 ☐ Track action items
@@ -1157,7 +1157,7 @@ After onboarding:
 ```text
 Connect Zoom
 
-WIT requires a Zoom connection
+WID requires a Zoom connection
 to capture Zoom meetings.
 
 [Connect Zoom]
@@ -1176,7 +1176,7 @@ After connecting:
 ```text
 ✓ Zoom connected
 
-WIT can now work with your Zoom meetings.
+WID can now work with your Zoom meetings.
 
 [Continue]
 ```
@@ -1190,7 +1190,7 @@ Show a clean completion screen:
 ```text
 You're ready.
 
-WIT is set up for you.
+WID is set up for you.
 
 Calendar
 ✓ Connected
@@ -1207,7 +1207,7 @@ Decisions · Actions · Questions
 Zoom
 Connected
 
-[Go to WIT]
+[Go to WID]
 ```
 
 Use a subtle success animation.
@@ -1224,7 +1224,7 @@ Desktop structure:
 
 ```text
 ┌──────────────────────────────────────────────────────────────┐
-│ WIT                                      Search    Alerts    │
+│ WID                                      Search    Alerts    │
 ├───────────────┬──────────────────────────────────────────────┤
 │               │                                              │
 │ My Calls      │                                              │
@@ -1858,7 +1858,7 @@ Clearly communicate:
 ```text
 Manual capture
 
-WIT will not automatically record
+WID will not automatically record
 calendar meetings.
 
 [Enabled]
@@ -1882,7 +1882,7 @@ These should be configurable for future backend support.
 Allow the user to configure:
 
 ```text
-What should WIT prioritize?
+What should WID prioritize?
 
 Decisions
 Action items
@@ -2051,7 +2051,7 @@ People
 Example:
 
 ```text
-Search WIT
+Search WID
 
 "launch"
 
@@ -2913,7 +2913,7 @@ Atlas Properties
 Crescent Health
 ```
 
-Do not imply these are real WIT customers.
+Do not imply these are real WID customers.
 
 ---
 
@@ -3206,11 +3206,11 @@ Marketing pages should include:
 
 Suggested title:
 
-> WIT — AI Meeting Intelligence
+> WID — AI Meeting Intelligence
 
 Suggested description:
 
-> WIT turns meetings into clear notes, decisions, action items and searchable knowledge.
+> WID turns meetings into clear notes, decisions, action items and searchable knowledge.
 
 ---
 
@@ -3250,7 +3250,7 @@ Never put secret API keys in `NEXT_PUBLIC_*`.
 Use:
 
 ```text
-wit/
+wid/
 ├── app/
 │   ├── (marketing)/
 │   │   ├── page.tsx
@@ -3545,7 +3545,7 @@ Risks
 
 Transcript
 
-[Ask WIT]
+[Ask WID]
 
 [Meeting info]
 ```
@@ -3560,7 +3560,7 @@ My Calls:
 
 > No meetings yet.
 >
-> Capture your first meeting and WIT will turn it into notes, decisions and action items.
+> Capture your first meeting and WID will turn it into notes, decisions and action items.
 
 CTA:
 
@@ -3826,7 +3826,7 @@ Example:
 
 ```text
 Waleed Ahmed
-waleed@wit-demo.com
+waleed@wid-demo.com
 Engineering
 Asia/Karachi
 Company email
@@ -3924,7 +3924,7 @@ Use clear language.
 
 Good:
 
-> WIT won't automatically record your calendar meetings. You choose when to capture.
+> WID won't automatically record your calendar meetings. You choose when to capture.
 
 Good:
 
@@ -3946,7 +3946,7 @@ Possible structure:
 
 ```text
 Free
-For trying WIT
+For trying WID
 
 Starter
 For individuals
@@ -3971,15 +3971,15 @@ Use:
 Include practical questions:
 
 ```text
-Does WIT automatically record meetings?
+Does WID automatically record meetings?
 
 Can I choose which meetings to capture?
 
-Does WIT work with Google Calendar?
+Does WID work with Google Calendar?
 
-Why does WIT need calendar access?
+Why does WID need calendar access?
 
-Does WIT require Zoom?
+Does WID require Zoom?
 
 Can I keep meeting notes private?
 
@@ -4005,7 +4005,7 @@ Answers should be concise and honest.
 Include:
 
 ```text
-WIT
+WID
 
 AI meeting intelligence.
 
@@ -4027,7 +4027,7 @@ Legal
 Privacy
 Terms
 
-© 2026 WIT
+© 2026 WID
 ```
 
 ---
@@ -4039,10 +4039,10 @@ Add appropriate metadata for every public page.
 Examples:
 
 ```text
-WIT — AI Meeting Intelligence
-WIT Features
-How WIT Works
-WIT Pricing
+WID — AI Meeting Intelligence
+WID Features
+How WID Works
+WID Pricing
 ```
 
 Use semantic page structures.
@@ -4252,7 +4252,7 @@ Stop
 Open meeting
 → meeting detail
 
-Ask WIT
+Ask WID
 → answer
 
 Jump to source
@@ -4414,7 +4414,7 @@ Raycast's speed
 +
 Fathom's meeting intelligence
 +
-WIT's own identity
+WID's own identity
 ```
 
 Do not clone Fathom's UI.
@@ -4432,7 +4432,7 @@ Build it as a **coherent meeting intelligence product**.
 A user should be able to:
 
 ```text
-Visit WIT
+Visit WID
    ↓
 Understand the product
    ↓
@@ -4448,7 +4448,7 @@ Understand that capture is manual
    ↓
 Choose meeting sharing preference
    ↓
-Choose what WIT should understand
+Choose what WID should understand
    ↓
 Select their job function
    ↓
@@ -4476,7 +4476,7 @@ Inspect transcript
    ↓
 Jump to timestamps
    ↓
-Ask WIT questions
+Ask WID questions
    ↓
 Save important moments
    ↓
@@ -4634,11 +4634,11 @@ The product should answer one question exceptionally well:
 
 > **"What actually happened in that meeting, and what do I need to do about it?"**
 
-Everything in WIT should support that question.
+Everything in WID should support that question.
 
 The final benchmark is:
 
-> **If someone lands on WIT, they should understand the value within seconds.**
+> **If someone lands on WID, they should understand the value within seconds.**
 
 And after signing up:
 

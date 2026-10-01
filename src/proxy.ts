@@ -7,7 +7,7 @@ import { SESSION_HINT_COOKIE, parseSessionHint } from "@/lib/auth/session-hint"
  * Route guarding (Next.js 16 `proxy.ts`, formerly middleware).
  *
  * MOCK GATING ONLY. The stage comes from a non-sensitive hint cookie
- * (`wit_session_hint`, see lib/auth/session-hint.ts) that anyone could set.
+ * (`wid_session_hint`, see lib/auth/session-hint.ts) that anyone could set.
  * It decides which screen to show first, nothing more. Real authorization is
  * enforced by the backend on every API call; never trust this file for
  * access control.

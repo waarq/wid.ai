@@ -45,7 +45,7 @@ export function ZoomConnect({ context, onStatusChange, className }: ZoomConnectP
           window.location.assign(result.authorizationUrl)
           return
         }
-        toast.success("Zoom connected", { description: "WIT can now work with your Zoom meetings." })
+        toast.success("Zoom connected", { description: "WID can now work with your Zoom meetings." })
       },
     })
   }
@@ -100,7 +100,7 @@ export function ZoomConnect({ context, onStatusChange, className }: ZoomConnectP
                 Zoom connected
               </p>
               <p className="text-sm text-muted-foreground">
-                WIT can now work with your Zoom meetings.
+                WID can now work with your Zoom meetings.
                 {zoom.data?.accountLabel ? <> · {zoom.data.accountLabel}</> : null}
               </p>
             </>
@@ -113,7 +113,7 @@ export function ZoomConnect({ context, onStatusChange, className }: ZoomConnectP
             <>
               <p className="text-sm font-medium text-foreground">Zoom</p>
               <p className="text-sm text-muted-foreground">
-                WIT requires a Zoom connection to capture Zoom meetings.
+                WID requires a Zoom connection to capture Zoom meetings.
               </p>
             </>
           )}

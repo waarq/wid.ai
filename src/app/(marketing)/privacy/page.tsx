@@ -3,8 +3,8 @@ import { LegalPage } from "@/components/marketing/layout/legal-page"
 import { createMetadata } from "@/components/marketing/seo"
 
 export const metadata = createMetadata({
-  title: "WIT Privacy",
-  description: "How WIT is designed to treat your information, and what this demo does and does not collect.",
+  title: "WID Privacy",
+  description: "How WID is designed to treat your information, and what this demo does and does not collect.",
   path: "/privacy",
 })
 

@@ -146,7 +146,7 @@ create table public.contacts (
   id           uuid primary key default gen_random_uuid(),
   org_id       uuid not null references public.organizations(id) on delete cascade,
   kind         contact_kind not null default 'person',
-  user_id      uuid references public.profiles(id) on delete set null,  -- set when the person is a WIT user
+  user_id      uuid references public.profiles(id) on delete set null,  -- set when the person is a WID user
   email        citext,
   display_name text not null check (char_length(display_name) between 1 and 120),
   company      text,

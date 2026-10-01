@@ -48,7 +48,7 @@ export function CaptureHost() {
   )
 }
 
-const NOTIFIED_KEY = "wit-capture-notified"
+const NOTIFIED_KEY = "wid-capture-notified"
 
 function readNotified(): string | null {
   try {
@@ -140,7 +140,7 @@ function CaptureDock() {
                   )}
                 />
               ) : null}
-              <span className="truncate">WIT capture</span>
+              <span className="truncate">WID capture</span>
               {collapsed && recording ? <CaptureClock className="text-foreground" /> : null}
               {collapsed && !recording ? (
                 <span className="text-foreground">

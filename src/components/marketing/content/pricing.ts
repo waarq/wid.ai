@@ -12,7 +12,7 @@ export const plans: Plan[] = [
   {
     id: "free",
     name: "Free",
-    audience: "For trying WIT",
+    audience: "For trying WID",
     summary: "See what a meeting looks like once it is understood.",
     features: [
       "Manual capture",

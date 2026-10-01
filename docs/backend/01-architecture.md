@@ -116,7 +116,7 @@ Rules that come out of this table:
 
 ## 4. Repository layout
 
-**Recommendation: one monorepo, npm workspaces** (the frontend already uses npm), not a separate `wit-backend` repo.
+**Recommendation: one monorepo, npm workspaces** (the frontend already uses npm), not a separate `wid-backend` repo.
 
 Why: the single most valuable artefact in this project is the contract between `src/services/interfaces` and the API. With one repo, the Zod schemas live in one package that both the frontend (`parse:` in `apiClient`) and the API (route schemas, OpenAPI) import, and a contract change is one PR that type-checks both sides. With two repos, the contract has to be published as a versioned package and drift between the two sides goes unnoticed until runtime.
 
@@ -199,8 +199,8 @@ Module rules (enforced with `eslint-plugin-boundaries` or `dependency-cruiser`):
 | --- | --- | --- | --- | --- |
 | `local` | `supabase start` (CLI, Docker) | `npm run dev` | ML sidecar on CPU (`small` or `large-v3-turbo` int8), Ollama local, or hosted provider via env | Daily development. Seeded with fictional demo data (the PRD's names only). |
 | `ci` | `supabase start` in the CI job | built and run in-process (`app.inject`) | stub providers (golden fixtures) | Unit, integration and RLS tests. Optional nightly pipeline run with real models. |
-| `staging` | dedicated project `wit-staging` | one API and one worker instance | small GPU on demand or hosted | Pre-release, OAuth app review demos, load tests. |
-| `production` | dedicated project `wit-prod` (Pro plan or higher; the Free plan caps files at 50 MB [verified: [Storage limits](https://supabase.com/docs/guides/storage/uploads/file-limits)]) | at least 2 API instances, worker pools by queue | per [08-open-questions.md](./08-open-questions.md) Q1 | Live. |
+| `staging` | dedicated project `wid-staging` | one API and one worker instance | small GPU on demand or hosted | Pre-release, OAuth app review demos, load tests. |
+| `production` | dedicated project `wid-prod` (Pro plan or higher; the Free plan caps files at 50 MB [verified: [Storage limits](https://supabase.com/docs/guides/storage/uploads/file-limits)]) | at least 2 API instances, worker pools by queue | per [08-open-questions.md](./08-open-questions.md) Q1 | Live. |
 
 Use one Supabase project per environment, not branches, for staging and prod: OAuth redirect URLs, webhooks and storage policies differ per environment, and the isolation is worth the small extra cost. Supabase Branching can be added later for per-PR preview databases.
 

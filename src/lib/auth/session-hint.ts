@@ -18,7 +18,7 @@ import type { AuthStage } from "@/types"
  * components and client code can all share it.
  */
 
-export const SESSION_HINT_COOKIE = "wit_session_hint"
+export const SESSION_HINT_COOKIE = "wid_session_hint"
 export const SESSION_HINT_VERSION = "v1"
 /** 7 days. The hint expires on its own; the backend session is what matters. */
 export const SESSION_HINT_MAX_AGE_SECONDS = 60 * 60 * 24 * 7

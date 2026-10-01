@@ -7,8 +7,8 @@ import { Cta } from "@/components/marketing/sections/cta"
 import { createMetadata } from "@/components/marketing/seo"
 
 export const metadata = createMetadata({
-  title: "About WIT",
-  description: "WIT is a meeting intelligence workspace that turns conversations into reliable, traceable work.",
+  title: "About WID",
+  description: "WID is a meeting intelligence workspace that turns conversations into reliable, traceable work.",
   path: "/about",
 })
 
@@ -23,7 +23,7 @@ const principles = [
   },
   {
     title: "Capture is manual",
-    body: "Your calendar tells WIT what exists. You decide what to capture. Nothing is recorded automatically.",
+    body: "Your calendar tells WID what exists. You decide what to capture. Nothing is recorded automatically.",
   },
   {
     title: "Private by default",
@@ -37,7 +37,7 @@ export default function AboutPage() {
       <PageIntro
         eyebrow="About"
         title="A workspace for what meetings leave behind."
-        description="WIT turns conversations into reliable, traceable work. It answers one question well: what actually happened in that meeting, and what do I need to do about it?"
+        description="WID, short for Wrote It Down, turns conversations into reliable, traceable work. It answers one question well: what actually happened in that meeting, and what do I need to do about it?"
       />
       <section aria-labelledby="principles-title" className="border-t border-border py-16 md:py-24">
         <Container className="grid gap-10 md:grid-cols-12 md:gap-8">

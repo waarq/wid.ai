@@ -7,7 +7,7 @@ export const CAPTURE_PREFERENCES = [
   "manual",
 ] as const
 /**
- * Which meetings WIT makes available for capture. None of these values ever
+ * Which meetings WID makes available for capture. None of these values ever
  * means automatic recording: capture is always started by the user.
  * Default: "manual".
  */
@@ -38,7 +38,7 @@ export const MEETING_FOCUS_OPTIONS = [
   "quotes",
   "sales_opportunities",
 ] as const
-/** What WIT should pay attention to when understanding a meeting. */
+/** What WID should pay attention to when understanding a meeting. */
 export type MeetingFocus = (typeof MEETING_FOCUS_OPTIONS)[number]
 
 export const ONBOARDING_GOALS = [
@@ -49,7 +49,7 @@ export const ONBOARDING_GOALS = [
   "search_past_meetings",
   "keep_team_aligned",
 ] as const
-/** "What do you want WIT to help you with?" (personalisation step). */
+/** "What do you want WID to help you with?" (personalisation step). */
 export type OnboardingGoal = (typeof ONBOARDING_GOALS)[number]
 
 /** Complete onboarding payload. Maps 1:1 to the backend onboarding request. */

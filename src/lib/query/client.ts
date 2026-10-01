@@ -27,7 +27,7 @@ function retryDelay(attempt: number, error: unknown): number {
   return Math.min(500 * 2 ** attempt, 8_000)
 }
 
-/** Fresh client with WIT defaults. Use directly in tests and server prefetching. */
+/** Fresh client with WID defaults. Use directly in tests and server prefetching. */
 export function makeQueryClient(): QueryClient {
   return new QueryClient({
     defaultOptions: {

@@ -15,14 +15,14 @@ export function Logo({ href = "/", className, size = "md" }: LogoProps) {
   return (
     <Link
       href={href}
-      aria-label="WIT home"
+      aria-label="WID home"
       className={cn(
         "inline-flex items-baseline gap-px rounded-sm font-semibold tracking-tight text-foreground",
         sizes[size],
         className
       )}
     >
-      WIT
+      WID
       <span aria-hidden className="size-1.5 rounded-full bg-primary" />
     </Link>
   )

@@ -2,8 +2,8 @@ import { ComingSoon } from "@/components/marketing/layout/coming-soon"
 import { createMetadata } from "@/components/marketing/seo"
 
 export const metadata = createMetadata({
-  title: "WIT Documentation",
-  description: "Documentation for WIT is on its way. Here is what it will cover.",
+  title: "WID Documentation",
+  description: "Documentation for WID is on its way. Here is what it will cover.",
   path: "/docs",
 })
 
@@ -19,7 +19,7 @@ export default function DocsPage() {
         "How manual capture works",
         "Reading a meeting brief and its sources",
         "Sharing and privacy controls",
-        "Connecting WIT to a backend API",
+        "Connecting WID to a backend API",
       ]}
     />
   )

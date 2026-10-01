@@ -11,20 +11,20 @@ export const CALENDAR_SCOPE_LABELS: Record<CalendarScope, string> = {
 }
 
 interface CalendarPermissionsPanelProps {
-  /** Defaults to every scope WIT requests. */
+  /** Defaults to every scope WID requests. */
   scopes?: readonly CalendarScope[]
   className?: string
 }
 
 /**
- * "What WIT needs access to", shown before the OAuth consent step so users
+ * "What WID needs access to", shown before the OAuth consent step so users
  * know exactly what is requested. Server-renderable.
  */
 export function CalendarPermissionsPanel({ scopes = CALENDAR_SCOPES, className }: CalendarPermissionsPanelProps) {
   return (
     <section aria-labelledby="calendar-permissions-title" className={cn("grid gap-3", className)}>
       <h2 id="calendar-permissions-title" className="text-sm font-medium text-foreground">
-        What WIT needs access to
+        What WID needs access to
       </h2>
       <ul className="grid gap-2">
         {scopes.map((scope) => (
@@ -37,7 +37,7 @@ export function CalendarPermissionsPanel({ scopes = CALENDAR_SCOPES, className }
       <p className="mt-1 grid grid-cols-[auto_1fr] items-start gap-2.5 text-sm text-muted-foreground">
         <ShieldCheck aria-hidden className="mt-0.5 size-4 text-muted-foreground" />
         <span>
-          WIT does not automatically record your calendar meetings. Access is read-only: WIT doesn&apos;t create,
+          WID does not automatically record your calendar meetings. Access is read-only: WID doesn&apos;t create,
           change or delete events.
         </span>
       </p>

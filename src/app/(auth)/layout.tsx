@@ -7,7 +7,7 @@ const PROMISES = [
   {
     icon: Hand,
     title: "You start every capture",
-    body: "WIT never records a meeting on its own. Connecting a calendar only shows what's coming up.",
+    body: "WID never records a meeting on its own. Connecting a calendar only shows what's coming up.",
   },
   {
     icon: Lock,
@@ -17,7 +17,7 @@ const PROMISES = [
   {
     icon: CalendarDays,
     title: "Two minutes to set up",
-    body: "Pick an account, connect your calendar if you like, and tell WIT what matters to you.",
+    body: "Pick an account, connect your calendar if you like, and tell WID what matters to you.",
   },
 ] as const
 
@@ -55,7 +55,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             ))}
           </ol>
         </div>
-        <p className="text-xs text-muted-foreground">WIT works with Google Calendar and Zoom.</p>
+        <p className="text-xs text-muted-foreground">WID works with Google Calendar and Zoom.</p>
       </aside>
     </div>
   )

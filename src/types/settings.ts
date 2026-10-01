@@ -29,13 +29,13 @@ export interface GeneralSettings {
 
 export interface MeetingSettings {
   defaultSharing: SharingPreference
-  /** Which insight types WIT extracts from meetings. */
+  /** Which insight types WID extracts from meetings. */
   meetingFocus: MeetingFocus[]
 }
 
 export interface CaptureSettings {
   /**
-   * Product rule, encoded in the type: WIT never records automatically.
+   * Product rule, encoded in the type: WID never records automatically.
    * Displayed as a locked "Enabled" switch.
    */
   manualCapture: true

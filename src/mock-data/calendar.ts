@@ -40,7 +40,7 @@ function event(
     startsAt,
     endsAt: plusSeconds(startsAt, minutes * 60),
     attendees: attendees(organizer, others),
-    conference: { provider, joinUrl: `https://meet.wit-demo.example/join/${id}` },
+    conference: { provider, joinUrl: `https://meet.wid-demo.example/join/${id}` },
     isRecurring,
   }
 }
@@ -64,7 +64,7 @@ export const calendarEvents: CalendarEvent[] = [
 export const calendarConnection: CalendarConnection = {
   provider: "google_calendar",
   status: "connected",
-  accountEmail: "waleed@wit-demo.com",
+  accountEmail: "waleed@wid-demo.com",
   connectedAt: atDay(-34, "10:20"),
   lastSyncedAt: atDay(0, "09:25"),
   upcomingEventCount: calendarEvents.length,

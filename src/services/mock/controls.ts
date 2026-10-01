@@ -15,15 +15,15 @@ import { APP_ERROR_CODES, type AppErrorCode } from "@/types"
  *      ?mockLatency=0 | slow | 800 | 300-900      override latency (ms)
  *      ?mockProcessing=fail                       next capture fails processing
  *
- * 2. Browser console (mock mode): `window.__WIT_MOCK__`
- *      __WIT_MOCK__.fail("meetings.list", "server_error")
- *      __WIT_MOCK__.fail("assistant.ask", "timeout", { times: 1 })
- *      __WIT_MOCK__.clearFailures()
- *      __WIT_MOCK__.setLatency(0)            // or setLatency(1500, 3000)
- *      __WIT_MOCK__.failNextProcessing()
- *      __WIT_MOCK__.failActiveCapture()      // recorder dies mid-capture
- *      __WIT_MOCK__.setProcessingPhaseMs(500)
- *      await __WIT_MOCK__.reset()            // back to seed data, keeps session
+ * 2. Browser console (mock mode): `window.__WID_MOCK__`
+ *      __WID_MOCK__.fail("meetings.list", "server_error")
+ *      __WID_MOCK__.fail("assistant.ask", "timeout", { times: 1 })
+ *      __WID_MOCK__.clearFailures()
+ *      __WID_MOCK__.setLatency(0)            // or setLatency(1500, 3000)
+ *      __WID_MOCK__.failNextProcessing()
+ *      __WID_MOCK__.failActiveCapture()      // recorder dies mid-capture
+ *      __WID_MOCK__.setProcessingPhaseMs(500)
+ *      await __WID_MOCK__.reset()            // back to seed data, keeps session
  *
  * 3. Code (scripts/tests only; UI never imports services/mock):
  *      import { mockControls } from "@/services/mock"
@@ -198,6 +198,6 @@ declare global {
      * Mock-mode demo controls. See src/services/mock/controls.ts. Installed
      * when the mock database first loads, so API mode never exposes it.
      */
-    __WIT_MOCK__?: MockControls
+    __WID_MOCK__?: MockControls
   }
 }

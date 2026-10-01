@@ -70,7 +70,7 @@ export function MobileNav() {
         <SheetContent side="bottom" className="rounded-t-xl pb-[max(1rem,env(safe-area-inset-bottom))]">
           <SheetHeader>
             <SheetTitle>More</SheetTitle>
-            <SheetDescription className="sr-only">Other sections of WIT</SheetDescription>
+            <SheetDescription className="sr-only">Other sections of WID</SheetDescription>
           </SheetHeader>
           <ul className="divide-y divide-border px-4">
             {[...MOBILE_MORE_NAV, { href: "/help", label: "Help", icon: LifeBuoy }].map((item) => {

@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Profile" }
 export default function ProfilePage() {
   return (
     <div className="space-y-6">
-      <PageHeader title="Profile" description="How you appear in WIT, and the timezone your meetings use." />
+      <PageHeader title="Profile" description="How you appear in WID, and the timezone your meetings use." />
       <ProfileView />
     </div>
   )

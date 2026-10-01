@@ -252,7 +252,7 @@ Client-side by design. `ApiCaptureService` implements the interface with:
 
 - `Meeting.summary` is present only when `status = 'ready'` (mock rule). `Meeting.processing` is present while processing and after failure. `Meeting.stats` is present when ready (lists include it).
 - `Meeting.sharedWithMe = !isOwner && canRead` is computed per viewer.
-- `Meeting.owner` is a `PersonRef` (contact id, name, email). `Participant.userId` is present only for WIT users.
+- `Meeting.owner` is a `PersonRef` (contact id, name, email). `Participant.userId` is present only for WID users.
 - `ActionItem.meeting` is a `MeetingRef` embedded in every list item (one join, no N+1). `ActionItem.assignee` is a full `Participant`.
 - `ProcessingProgress.error` is an `AppError` JSON object (`code: 'processing_failed'` or `'capture_failed'`, user-safe `message`, `retryable`).
 - `Alert.target` exactly matches the `AlertTarget` union. `meetings` targets list only readable meetings, and the alert is dropped if none remain (mock `deleteMeetingOp` semantics).

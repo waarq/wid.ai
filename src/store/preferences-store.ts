@@ -101,7 +101,7 @@ export const usePreferencesStore = create<PreferencesState>()(
       resetPreferences: () => set({ ...defaults, collapsedBriefSections: [] }),
     }),
     {
-      name: "wit-preferences",
+      name: "wid-preferences",
       version: PREFERENCES_STORE_VERSION,
       storage: safeLocalStorage<PersistedPreferences>(),
       partialize: (s): PersistedPreferences => ({

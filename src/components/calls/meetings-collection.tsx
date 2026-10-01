@@ -68,7 +68,7 @@ export function MeetingsCollection({ params, variant, filtered, clearHref }: Mee
       <EmptyState
         icon={AudioLines}
         title="No meetings yet."
-        description="Capture your first meeting and WIT will turn it into notes, decisions and action items."
+        description="Capture your first meeting and WID will turn it into notes, decisions and action items."
         action={<CaptureMeetingButton />}
       />
     )

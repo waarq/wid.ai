@@ -13,7 +13,7 @@ import { isValidEmail, nowIso } from "./utils"
  *   - signInWithGoogle({ accountId }) picks one; { loginHint } is
  *     "Use another account"
  *
- * The demo work account (waleed@wit-demo.com) is an existing, onboarded user
+ * The demo work account (waleed@wid-demo.com) is an existing, onboarded user
  * for intent "sign_in". Any other account, and intent "register", starts a
  * fresh onboarding. No token is created or stored anywhere: the only thing
  * written is the non-sensitive routing hint cookie (lib/auth).

@@ -28,7 +28,7 @@ What the frontend assumes today (`lib/api`, `docs/conventions.md` section 9):
 
 - The fetch adapter sends `credentials: "include"` (a backend httpOnly cookie).
 - Optionally, `setAuthTokenProvider()` registers an in-memory bearer token source. The API client then sends `Authorization: Bearer`.
-- `proxy.ts` routes on a non-sensitive `wit_session_hint` cookie.
+- `proxy.ts` routes on a non-sensitive `wid_session_hint` cookie.
 
 **Recommendation: the Supabase session lives in cookies managed by `@supabase/ssr`, and the API is called with `Authorization: Bearer <access_token>` through `setAuthTokenProvider`.**
 
@@ -73,7 +73,7 @@ Replace the mock hint cookie with real but still non-authoritative routing:
 - In `proxy.ts`, create a `@supabase/ssr` server client from request cookies. It refreshes the session cookie when needed, which is the documented middleware/proxy pattern. Next 16 `proxy.ts` always runs on Node.js, which `@supabase/ssr` supports.
 - Call `supabase.auth.getClaims()`. It verifies the JWT locally with asymmetric keys [verified: [getClaims](https://supabase.com/docs/reference/javascript/auth-getclaims)].
 - Stage: add a **Custom Access Token Hook** (a Postgres function) that puts `app_stage: 'onboarding' | 'ready'` into the JWT from `profiles.onboarding_completed_at`. After `POST /onboarding/complete`, the frontend calls `supabase.auth.refreshSession()` so the next navigation sees `ready`.
-- Keep `resolveRouteAccess()` unchanged. Only the input (stage) changes source. The `wit_session_hint` cookie can be removed.
+- Keep `resolveRouteAccess()` unchanged. Only the input (stage) changes source. The `wid_session_hint` cookie can be removed.
 
 ### 2.5 XSS and token hardening
 
@@ -104,7 +104,7 @@ Derived rules:
 
 - **Write (update, delete, share, unshare, capture control, retry):** owner only (`requireOwnedMeeting` in the mock). Others get `forbidden`.
 - **Child data** (transcript, insights, assistant, playlist reads) is readable if the meeting is readable. The transcript and audio additionally need `owner OR share_transcript / share_recording`.
-- **Action items:** updating status, assignee or due date is allowed for the meeting owner **and** for the assignee (WIT users assigned to an item can mark it done). The mock allows any viewer to edit. We narrow that. Confirm in [08-open-questions.md](./08-open-questions.md) Q9.
+- **Action items:** updating status, assignee or due date is allowed for the meeting owner **and** for the assignee (WID users assigned to an item can mark it done). The mock allows any viewer to edit. We narrow that. Confirm in [08-open-questions.md](./08-open-questions.md) Q9.
 - **Alerts:** recipient only. **Playlist:** creator only, and an item is visible only while its meeting is still readable (mock behaviour).
 - **Deals:** org members read; owner or org admin write. Signals are visible only if the source meeting is readable.
 - **Invisible means `not_found`**, never `forbidden`. That is what `requireMeeting` does and it prevents id probing.
@@ -266,7 +266,7 @@ The API calls these with the **user-scoped** client (`supabase.rpc(...)`). Each 
 | `app_private.stop_capture(meeting_id, client_elapsed, last_seq)` | session to `finalizing`, meeting `capturing/paused` to `processing`, creates the `processing_run` and steps, `ops.enqueue_job('capture','capture.assemble',…)` |
 | `app_private.discard_capture(meeting_id)` | deletes the meeting (if `created_meeting`) or resets it to `ready_to_capture`; enqueues storage cleanup |
 | `app_private.retry_processing(meeting_id)` | `failed` to `processing`, `attempt+1`, resets failed and later steps to `pending`, enqueues from the first incomplete step |
-| `app_private.share_meeting(meeting_id, visibility, invite_emails[], link_enabled)` | the mock `share()` semantics including clearing exclusions, plus creates `meeting_shared` alerts for invited WIT users |
+| `app_private.share_meeting(meeting_id, visibility, invite_emails[], link_enabled)` | the mock `share()` semantics including clearing exclusions, plus creates `meeting_shared` alerts for invited WID users |
 | `app_private.unshare(meeting_id, recipient_id)` | revoke a grant or insert an exclusion; rejects team recipients |
 | `app_private.delete_meeting(meeting_id)` | soft-delete, cancel queued jobs, enqueue storage purge, clean alert targets (mock `deleteMeetingOp`) |
 
@@ -356,7 +356,7 @@ The client sets `private: true` and calls `supabase.realtime.setAuth()` so the J
 
 ## 10. Authorization test matrix (must pass in CI)
 
-pgTAP (RLS) plus API integration tests (computed permissions), with fixtures for: owner O; teammate T (same org, not a participant); attendee A (WIT user, participant); excluded attendee X; invited external E (email grant, not yet signed up, then signed up); stranger S (other org); assignee Y.
+pgTAP (RLS) plus API integration tests (computed permissions), with fixtures for: owner O; teammate T (same org, not a participant); attendee A (WID user, participant); excluded attendee X; invited external E (email grant, not yet signed up, then signed up); stranger S (other org); assignee Y.
 
 For each visibility (private, attendees, team), each actor and each operation (read meeting, read transcript, read audio URL, update, share, unshare, toggle action, add playlist, ask assistant, search hit, deal signal visibility) the expected result is asserted. The mock's behaviour is the oracle for overlapping cases. The test file lives at `supabase/tests/rls_meetings.test.sql` and mirrors `src/services/mock/meeting-service.ts` `inScope` and `canAccess`.
 
@@ -371,7 +371,7 @@ For each visibility (private, attendees, team), each actor and each operation (r
 
 ## 12. Recording consent (flagged, not legal advice)
 
-The product records conversations involving people who are not WIT users. Legal exposure depends on the participants' jurisdictions, not only the user's:
+The product records conversations involving people who are not WID users. Legal exposure depends on the participants' jurisdictions, not only the user's:
 
 - **All-party (two-party) consent jurisdictions** exist in several US states (for example California, Florida, Illinois, Pennsylvania and Washington are commonly cited) and in other countries. Recording without every participant's consent can be a criminal offence in some of them.
 - **GDPR (EU/UK):** voice recordings and transcripts are personal data. A lawful basis is needed (often legitimate interest or consent), along with transparency to participants, and possibly a DPIA for systematic recording plus AI analysis. Voice used to identify speakers can be biometric data, which bears on any future voice-print speaker identification. **We do not build voice prints in the MVP for this reason.**
@@ -380,7 +380,7 @@ The product records conversations involving people who are not WIT users. Legal 
 Product controls we build regardless of the legal outcome:
 
 1. `confirmBeforeCapture` (default on): the start-capture dialog includes "I've let everyone know this meeting is being captured", and the attestation is stored in `capture_sessions.consent_attested_at`. The API rejects `start` without it when the setting is on.
-2. A copyable notice ("This meeting is being captured by WIT for notes. Let me know if you'd prefer not.") for the meeting chat. Bots that announce themselves are out of scope (see [05-capture-and-pipeline.md](./05-capture-and-pipeline.md) section 2).
+2. A copyable notice ("This meeting is being captured by WID for notes. Let me know if you'd prefer not.") for the meeting chat. Bots that announce themselves are out of scope (see [05-capture-and-pipeline.md](./05-capture-and-pipeline.md) section 2).
 3. Zoom cloud recordings already show Zoom's own recording notice to participants, so the Zoom import path carries the least risk.
-4. A participant data-request process: anyone in a recording can ask the owner or WIT for deletion. A support runbook is written in M10.
+4. A participant data-request process: anyone in a recording can ask the owner or WID for deletion. A support runbook is written in M10.
 5. Terms of Service must put the consent obligation on the user. Counsel must review the ToS, the privacy policy and the in-product copy before public launch. This is a launch blocker in [07-roadmap.md](./07-roadmap.md).

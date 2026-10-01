@@ -124,7 +124,7 @@ export function ProfileFields({ form, email }: { form: UseFormReturn<ProfileValu
           Account type
         </p>
         <p id={`${typeId}-hint`} className="text-sm text-muted-foreground">
-          The email type you chose for yourself. WIT never guesses it from your address.
+          The email type you chose for yourself. WID never guesses it from your address.
         </p>
         <Controller
           control={form.control}

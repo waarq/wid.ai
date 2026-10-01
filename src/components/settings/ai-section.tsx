@@ -46,7 +46,7 @@ export function AiSection({ ai }: { ai: AiSettings }) {
     <SettingsForm
       form={form}
       title="AI & Understanding"
-      description="How WIT reads your meetings. Every insight still links back to the exact moment it came from."
+      description="How WID reads your meetings. Every insight still links back to the exact moment it came from."
       saving={saving}
       error={error}
       saved={saved}
@@ -54,7 +54,7 @@ export function AiSection({ ai }: { ai: AiSettings }) {
     >
       <div className="grid gap-2">
         <p id={prioritiesId} className="text-sm font-medium">
-          What should WIT prioritize?
+          What should WID prioritize?
         </p>
         <p id={`${prioritiesId}-hint`} className="text-sm text-muted-foreground">
           Ordered by importance. The first item is weighted highest in summaries.

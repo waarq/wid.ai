@@ -5,7 +5,7 @@ import { PageIntro } from "@/components/marketing/layout/page-intro"
 import { createMetadata } from "@/components/marketing/seo"
 
 export const metadata = createMetadata({
-  title: "WIT Help",
+  title: "WID Help",
   description: "Where to find answers about capture, privacy, sharing and plans.",
   path: "/help",
 })
@@ -13,7 +13,7 @@ export const metadata = createMetadata({
 const topics = [
   {
     title: "How capture works",
-    body: "Connect a calendar, choose a meeting and start capture yourself. WIT never records on its own.",
+    body: "Connect a calendar, choose a meeting and start capture yourself. WID never records on its own.",
     href: "/how-it-works",
     cta: "How it works",
   },
@@ -25,7 +25,7 @@ const topics = [
   },
   {
     title: "Privacy and sharing",
-    body: "What WIT uses, what stays private by default, and how sharing works.",
+    body: "What WID uses, what stays private by default, and how sharing works.",
     href: "/privacy",
     cta: "Privacy",
   },

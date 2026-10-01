@@ -72,7 +72,7 @@ export function MeetingBrief({ meeting, onJumpToSource, onAddToPlaylist }: Meeti
       <EmptyState
         icon={FileText}
         title="No brief yet"
-        description="The brief appears here once WIT has finished understanding this meeting."
+        description="The brief appears here once WID has finished understanding this meeting."
       />
     )
   }

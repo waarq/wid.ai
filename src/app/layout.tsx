@@ -5,20 +5,20 @@ import { fontMono, fontSans } from "@/lib/fonts"
 
 import "./globals.css"
 
-const TITLE = "WIT — AI Meeting Intelligence"
+const TITLE = "WID — AI Meeting Intelligence"
 const DESCRIPTION =
-  "WIT turns meetings into clear notes, decisions, action items and searchable knowledge."
+  "WID turns meetings into clear notes, decisions, action items and searchable knowledge."
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
   ),
-  title: { default: TITLE, template: "%s — WIT" },
+  title: { default: TITLE, template: "%s — WID" },
   description: DESCRIPTION,
-  applicationName: "WIT",
+  applicationName: "WID",
   openGraph: {
     type: "website",
-    siteName: "WIT",
+    siteName: "WID",
     title: TITLE,
     description: DESCRIPTION,
     locale: "en_US",

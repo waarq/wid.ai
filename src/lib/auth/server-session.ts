@@ -10,7 +10,7 @@ import { SESSION_HINT_COOKIE, parseSessionHint } from "./session-hint"
  * intentionally not re-exported from "@/lib/auth".
  *
  * Use it for presentation only, e.g. a marketing navbar choosing between
- * "Sign in" and "Open WIT". Never for authorization.
+ * "Sign in" and "Open WID". Never for authorization.
  *
  * Calling it opts the route into dynamic rendering (cookies() is a request
  * API), so keep it out of fully static marketing pages.

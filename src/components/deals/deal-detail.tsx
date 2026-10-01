@@ -192,7 +192,7 @@ function DealBody({ deal }: { deal: Deal }) {
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         title={`Delete ${deal.company}?`}
-        description="This removes the deal from WIT. The meetings linked to it are kept."
+        description="This removes the deal from WID. The meetings linked to it are kept."
         confirmLabel="Delete deal"
         variant="destructive"
         loading={remove.isPending}

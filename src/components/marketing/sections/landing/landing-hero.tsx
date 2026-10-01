@@ -24,7 +24,7 @@ export function LandingHero() {
             Meetings that <span className="text-primary">remember</span> what happened
           </h1>
           <p className="mt-7 max-w-md text-base leading-relaxed text-pretty text-muted-foreground md:text-lg">
-            WIT turns the conversation into notes, decisions and action items.{" "}
+            WID turns the conversation into notes, decisions and action items.{" "}
             <strong className="font-medium text-foreground">You start every capture.</strong>
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -52,7 +52,7 @@ export function LandingHero() {
           </ul>
         </div>
 
-        <figure aria-label="WIT product preview" className="relative grid grid-cols-6 gap-3 sm:gap-4">
+        <figure aria-label="WID product preview" className="relative grid grid-cols-6 gap-3 sm:gap-4">
           <div className={cn("landing-capsule-glow col-span-4 rounded-[2.5rem] p-6", drift)}>
             <p className="font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">Capture</p>
             <ul className="mt-3 space-y-2 text-sm">
@@ -70,7 +70,7 @@ export function LandingHero() {
           <div className="landing-capsule col-span-2 grid place-items-center rounded-[2.5rem] p-4 text-center">
             <div>
               <Search aria-hidden className="mx-auto size-5 text-primary" />
-              <p className="mt-2 text-sm font-medium tracking-tight">Ask WIT</p>
+              <p className="mt-2 text-sm font-medium tracking-tight">Ask WID</p>
             </div>
           </div>
 

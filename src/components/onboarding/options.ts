@@ -39,13 +39,13 @@ export const EMAIL_TYPE_OPTIONS: OptionCopy<EmailType>[] = [
   {
     value: "company",
     label: "My company's email",
-    description: "I'm using WIT for work and team meetings.",
+    description: "I'm using WID for work and team meetings.",
     icon: Building2,
   },
   {
     value: "personal",
     label: "My personal email",
-    description: "I'm using WIT for my own meetings and projects.",
+    description: "I'm using WID for my own meetings and projects.",
     icon: UserRound,
   },
 ]
@@ -54,7 +54,7 @@ export const CAPTURE_PREFERENCE_OPTIONS: OptionCopy<CapturePreference>[] = [
   {
     value: "all_calendar_meetings",
     label: "All calendar meetings",
-    description: "WIT will make every meeting available for manual capture.",
+    description: "WID will make every meeting available for manual capture.",
   },
   {
     value: "selected_meetings",
@@ -64,7 +64,7 @@ export const CAPTURE_PREFERENCE_OPTIONS: OptionCopy<CapturePreference>[] = [
   {
     value: "manual",
     label: "I'll choose manually",
-    description: "WIT will never automatically capture. I'll start each meeting myself.",
+    description: "WID will never automatically capture. I'll start each meeting myself.",
   },
 ]
 

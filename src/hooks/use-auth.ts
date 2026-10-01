@@ -17,7 +17,7 @@ export function useSession() {
   })
 }
 
-/** Accounts for the WIT Google account chooser. May be [] for real OAuth. */
+/** Accounts for the WID Google account chooser. May be [] for real OAuth. */
 export function useGoogleAccounts(options: { enabled?: boolean } = {}) {
   return useQuery<GoogleAccountOption[]>({
     queryKey: queryKeys.auth.googleAccounts(),

@@ -27,7 +27,7 @@ Tag conventions are the same as [01-architecture.md](./01-architecture.md): **[v
 | Realtime | 200 concurrent connections, 2 M messages/month, 100 messages/s, 100 channel joins/s | Not a constraint, and the slice does not use Realtime (polling only). | [verified: pricing, [Realtime limits](https://supabase.com/docs/guides/realtime/limits)] |
 | Edge Functions | 500k invocations; 256 MB memory; **2 s CPU time** per request; 150 s wall clock on Free | Too tight to host the pipeline (see 2.4). | [verified: pricing, [function limits](https://supabase.com/docs/guides/functions/limits)] |
 | Project pausing | Paused after **1 week of low database activity**. "A few user requests to the database each day" keeps it active. Restore from the dashboard ("Resume project"). Restorable for 90 days. | A demo project that sits idle for a week goes dark. See 2.5. | [verified: pricing, [project pausing](https://supabase.com/docs/guides/platform/free-project-pausing), [90-day changelog](https://supabase.com/changelog/27497-paused-free-plan-projects-are-restorable-for-90-days)] |
-| Active projects | 2 per org | One `wit-demo` project. Local dev uses `supabase start`. There is no separate staging project in the slice. | [verified: pricing] |
+| Active projects | 2 per org | One `wid-demo` project. Local dev uses `supabase start`. There is no separate staging project in the slice. | [verified: pricing] |
 | Custom Access Token hook | Available on Free | The `app_stage` claim from [03-security-rls.md](./03-security-rls.md) section 2.4 works unchanged. | [verified: [auth hooks](https://supabase.com/docs/guides/auth/auth-hooks)] |
 | Backups / PITR | No PITR on Free. Whether daily backups can be downloaded on Free is **[unverified]**. | Treat demo data as disposable. Run a weekly `supabase db dump` from CI or by hand. | none |
 | Compute size, max DB connections on Free | **[unverified]** (believed to be the smallest shared instance) | Keep the API's SQL pool at 5 connections or fewer. | none |
@@ -108,7 +108,7 @@ Caveats to state honestly:
 
 **What to tell pilot participants** (in the consent dialog copy and a one-page pilot note):
 
-> This is an internal test of WIT. When you're in a captured meeting, the audio is stored in WIT's database (Supabase) and sent to third-party AI services (Groq, Cerebras and, as a fallback, Cloudflare) in the US to produce the transcript and notes. Under their terms these services don't train on it, but this pilot has no formal data-processing agreement. Don't use WIT for confidential, customer or legal matters. Ask the meeting owner, or [owner email], to delete a recording at any time. Recordings are deleted after 30 days.
+> This is an internal test of WID. When you're in a captured meeting, the audio is stored in WID's database (Supabase) and sent to third-party AI services (Groq, Cerebras and, as a fallback, Cloudflare) in the US to produce the transcript and notes. Under their terms these services don't train on it, but this pilot has no formal data-processing agreement. Don't use WID for confidential, customer or legal matters. Ask the meeting owner, or [owner email], to delete a recording at any time. Recordings are deleted after 30 days.
 
 This complements the consent attestation from [03-security-rls.md](./03-security-rls.md) section 12, which stays on (`confirmBeforeCapture` defaults to true).
 
@@ -423,7 +423,7 @@ That is well inside the long-term SLO of under 10 minutes for 60 minutes of audi
 
 | Failure | Detection | Behaviour |
 | --- | --- | --- |
-| Tab audio missing (user shared a window or the screen without "Share tab audio") | The `tab` track's energy stays at zero for 20 s | A capture-bar warning: "WIT can't hear the meeting tab. Stop and share the tab with audio." The demo script rehearses choosing the tab. |
+| Tab audio missing (user shared a window or the screen without "Share tab audio") | The `tab` track's energy stays at zero for 20 s | A capture-bar warning: "WID can't hear the meeting tab. Stop and share the tab with audio." The demo script rehearses choosing the tab. |
 | User on speakers: echo on the mic | Cross-channel dedupe hits | Handled in `build_segments`. Brief quality degrades a little. Recommend headphones in the script. |
 | Whisper hallucination on silence or music | `no_speech_prob`, repeat loops | Dropped. Silent mic parts are never sent (speech fraction under 2%). |
 | Cut word at a part rotation | Rotation happens at silence | Usually none. The worst case is one garbled word. |
@@ -437,7 +437,7 @@ That is well inside the long-term SLO of under 10 minutes for 60 minutes of audi
 
 ### 4.6 The wow path: a 6 to 7 minute scripted meeting
 
-**Setup:** the owner (demo user **Waleed Ahmed**) in Chrome with WIT open. A colleague plays **Sara Ahmed (Northstar Labs)** on Google Meet in another Chrome tab, both wearing headphones. A calendar event "Northstar Labs launch sync" is on the owner's Google Calendar with exactly one other attendee (the colleague's account, whose display name is set to "Sara Ahmed"), so the tab track maps to Sara with no diarization. All names and companies are the PRD's fictional ones (conventions section 8), so the content is synthetic and `synthetic=true`.
+**Setup:** the owner (demo user **Waleed Ahmed**) in Chrome with WID open. A colleague plays **Sara Ahmed (Northstar Labs)** on Google Meet in another Chrome tab, both wearing headphones. A calendar event "Northstar Labs launch sync" is on the owner's Google Calendar with exactly one other attendee (the colleague's account, whose display name is set to "Sara Ahmed"), so the tab track maps to Sara with no diarization. All names and companies are the PRD's fictional ones (conventions section 8), so the content is synthetic and `synthetic=true`.
 
 **Script beats** (each beat is written so the extraction target is explicit, quotable and unambiguous; the full line-by-line script lives in `fixtures/golden/wow-script.md`):
 
@@ -506,7 +506,7 @@ Ordered checklist:
 
 1. [ ] `src/lib/api/http-errors.ts`: prefer `data.code` when `isAppErrorCode(data.code)`; 503 to `service_unavailable`, 502 to `server_error`; keep 429 `Retry-After` to `retryAfterSeconds` and 422 `fieldErrors`.
 2. [ ] Add `@supabase/ssr` browser and server clients in `src/lib/auth`; the `/auth/callback` route handler (exchange code, `POST /v1/auth/bootstrap`, redirect by stage); register `setAuthTokenProvider(() => session.access_token)` in the app providers.
-3. [ ] `src/proxy.ts`: `getClaims()`, then `app_stage`, then the existing `resolveRouteAccess()`; stop writing `wit_session_hint`. After `POST /onboarding/complete`, call `supabase.auth.refreshSession()`.
+3. [ ] `src/proxy.ts`: `getClaims()`, then `app_stage`, then the existing `resolveRouteAccess()`; stop writing `wid_session_hint`. After `POST /onboarding/complete`, call `supabase.auth.refreshSession()`.
 4. [ ] `src/services/registry.ts`: add `NEXT_PUBLIC_API_SERVICES` (read literally) and allow mixed mode when `NEXT_PUBLIC_APP_ENV !== 'production'` (07 section 2).
 5. [ ] `src/contracts/`: Zod schemas for every type the 13 services return, plus a **mock conformance test** (each `Mock*` output parses), run with `npm run test:run`.
 6. [ ] `src/services/api/`: `ApiAuthService` (with a "Redirecting to Google" pending state in the login UI), `ApiUserService`, `ApiOnboardingService`, `ApiSettingsService`.

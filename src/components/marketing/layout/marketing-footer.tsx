@@ -37,7 +37,7 @@ export function MarketingFooter() {
           </nav>
         </div>
         <div className="mt-16 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono">&copy; 2026 WIT</p>
+          <p className="font-mono">&copy; 2026 WID</p>
           <p>Demo build. Names, companies and meetings shown are fictional.</p>
         </div>
       </Container>

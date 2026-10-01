@@ -11,7 +11,7 @@ export type ISODateString = string
 export type ISODate = string
 export type Seconds = number
 
-/** Lightweight reference to a person (WIT user, attendee or external contact). */
+/** Lightweight reference to a person (WID user, attendee or external contact). */
 export interface PersonRef {
   id: string
   name: string

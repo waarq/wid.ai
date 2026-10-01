@@ -127,7 +127,7 @@ Supabase Auth Google provider, scopes `openid email profile`, `prompt=select_acc
 - Zoom Marketplace **General App, user-managed OAuth**. Required for other accounts to install it. An unpublished app can only be installed within the developer's own account, so **public use requires Marketplace review and publishing** [verified indirectly: [devforum on unpublished app limits](https://devforum.zoom.us/t/how-to-test-obf-token-implementation-with-external-zoom-accounts-if-unpublished-app-cant-be-installed-outside-developer-account/145012)]. Plan 2 to 6 weeks for review [unverified].
 - Scopes (granular, read-only, minimal): user profile (`user:read:user`), list and read cloud recordings (`cloud_recording:read:list_user_recordings`, `cloud_recording:read:recording`) [unverified exact granular scope names; confirm in the app builder]. **No** delete scopes and **no** meeting-join or SDK scopes.
 - Event subscriptions: `recording.completed`, `recording.transcript_completed` (optional), plus the deauthorization notification (`app.deauthorized`) that Marketplace requires.
-- Cloud recording is a Zoom **paid-plan** feature, and the **host** (or an account admin) is the one whose token can list a meeting's recordings. A WIT user who is only an attendee of someone else's Zoom meeting cannot import it.
+- Cloud recording is a Zoom **paid-plan** feature, and the **host** (or an account admin) is the one whose token can list a meeting's recordings. A WID user who is only an attendee of someone else's Zoom meeting cannot import it.
 
 ### 3.2 OAuth
 
@@ -165,7 +165,7 @@ User clicks Import  (GET /v1/integrations/zoom/recordings lists offers + recent 
 
 ### 3.5 Deauthorization and data deletion
 
-- On `app.deauthorized`: verify, mark the integration `revoked`, delete credentials, delete offers, keep already-imported meetings (they are the user's WIT data now), and respond 200. Zoom's Marketplace data-compliance rules may also require confirming deletion through their compliance API [unverified current requirement; check during review].
+- On `app.deauthorized`: verify, mark the integration `revoked`, delete credentials, delete offers, keep already-imported meetings (they are the user's WID data now), and respond 200. Zoom's Marketplace data-compliance rules may also require confirming deletion through their compliance API [unverified current requirement; check during review].
 - User-initiated disconnect: `POST https://zoom.us/oauth/revoke`, then the same cleanup.
 
 ---
@@ -195,7 +195,7 @@ All are `pg_cron` entries calling `ops.enqueue_job`. The work runs in the worker
 | Provider | Category | Shape | Notes and triggers |
 | --- | --- | --- | --- |
 | **Microsoft Calendar** | calendar | `CalendarProviderAdapter { listCalendars, fullSync, incrementalSync, watch, stopWatch }`, implemented with Microsoft Graph delta queries + change-notification subscriptions | Subscriptions expire quickly and need frequent renewal [unverified exact maximum]. Same `calendars`/`calendar_events` tables (`provider` comes from the integration). `CalendarProvider` already has `microsoft_calendar`. |
-| **Slack** | messaging | `notify` fan-out sink: on `meeting_ready`, post the brief (decisions + actions with "Open in WIT" links, **no transcript**) to `settings.channelId` if `postSummaries` | Bot token stored like the other credentials. Respect meeting visibility: only post meetings whose visibility is `team`, or `attendees` when the channel is private and confirmed by the user. |
+| **Slack** | messaging | `notify` fan-out sink: on `meeting_ready`, post the brief (decisions + actions with "Open in WID" links, **no transcript**) to `settings.channelId` if `postSummaries` | Bot token stored like the other credentials. Respect meeting visibility: only post meetings whose visibility is `team`, or `attendees` when the channel is private and confirmed by the user. |
 | **HubSpot / Salesforce** | crm | One-way push first: deal stage, next action, meeting-summary note on the CRM record. `integration_object_links(provider, external_type, external_id, local_type, local_id)` maps records. | Deals stay "not a CRM" (PRD). Two-way sync is a separate project. `syncDeals` setting already exists. |
 | Email | notifications | `notify` channel `email` (`channel_email`), via a transactional email provider; templates for meeting ready, action due, shared with you | Needs SPF/DKIM/DMARC on the sending domain. Invite emails to non-users wait for this. |
 

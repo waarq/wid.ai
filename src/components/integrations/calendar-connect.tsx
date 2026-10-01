@@ -148,8 +148,8 @@ export function CalendarConnect({ context, onStatusChange, className }: Calendar
               <p className="text-sm font-medium text-foreground">Google Calendar</p>
               <p className="text-sm text-muted-foreground">
                 {context === "onboarding"
-                  ? "Bring your meetings into WIT."
-                  : "Not connected. WIT can't show your upcoming meetings."}
+                  ? "Bring your meetings into WID."
+                  : "Not connected. WID can't show your upcoming meetings."}
               </p>
             </>
           )}
@@ -166,7 +166,7 @@ export function CalendarConnect({ context, onStatusChange, className }: Calendar
           >
             <p className="font-medium">Your calendar is connected.</p>
             <p>
-              WIT can see your upcoming meetings, but nothing will be recorded automatically. You decide when to
+              WID can see your upcoming meetings, but nothing will be recorded automatically. You decide when to
               capture.
             </p>
             <div>

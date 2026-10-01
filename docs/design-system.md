@@ -1,4 +1,4 @@
-# WIT design system
+# WID design system
 
 Quiet, warm, precise. Dense where it helps, spacious where it matters. Linear's precision, Notion's calm, one muted emerald accent.
 

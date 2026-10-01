@@ -2,8 +2,8 @@ import { ComingSoon } from "@/components/marketing/layout/coming-soon"
 import { createMetadata } from "@/components/marketing/seo"
 
 export const metadata = createMetadata({
-  title: "WIT Blog",
-  description: "There are no posts on the WIT blog yet.",
+  title: "WID Blog",
+  description: "There are no posts on the WID blog yet.",
   path: "/blog",
 })
 

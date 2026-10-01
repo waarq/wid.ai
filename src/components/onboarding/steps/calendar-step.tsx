@@ -19,14 +19,14 @@ export function CalendarStep(props: StepProps) {
       onBack={props.onBack}
       focusHeading={props.focusHeading}
       title={connected ? "Your calendar is ready" : "Connect your calendar"}
-      description="WIT uses your calendar to understand which meetings you have coming up. WIT will not automatically record your meetings. You choose when to capture."
+      description="WID uses your calendar to understand which meetings you have coming up. WID will not automatically record your meetings. You choose when to capture."
       hideContinue={!connected}
       onSubmit={() => props.onSave({ step: "calendar", data: { calendarConnected: true } })}
       onSkip={connected ? undefined : () => props.onSave({ step: "calendar", data: { calendarConnected: false }, skipped: true })}
       footerNote={
         connected ? null : (
           <>
-            Without a calendar, WIT can&apos;t show upcoming meetings, titles or attendees, so you&apos;ll name each
+            Without a calendar, WID can&apos;t show upcoming meetings, titles or attendees, so you&apos;ll name each
             capture yourself. You can connect later in Settings.
           </>
         )

@@ -102,7 +102,7 @@ export const useCaptureStore = create<CaptureStoreState>()(
       reset: () => apply(set, get, { type: "reset" }),
     }),
     {
-      name: "wit-capture",
+      name: "wid-capture",
       version: 1,
       storage: safeSessionStorage<Pick<CaptureStoreState, "session">>(),
       partialize: (state) => ({ session: state.session }),

@@ -24,7 +24,7 @@ Owner decision (2026-10-01): build an investor-ready demo slice on free tiers fi
 
 ### M0. Repo, CI, Supabase local (1.5 wk)
 
-- **Scope:** monorepo move (`apps/web`, `apps/api`, `apps/worker`, `packages/contracts`, `packages/db`, `supabase/`, `services/ml`). Fastify skeleton (Zod-validated config, Pino, request id, error handler implementing [01-architecture.md](./01-architecture.md) section 10, `/healthz`, `/readyz`, OpenAPI generation). `supabase init` with the extensions and types migration. Docker compose (api, worker, ml-cpu, ollama). GitHub Actions (section 5). `wit-staging` Supabase project. Contracts package seeded with `common`, `errors` and `user`.
+- **Scope:** monorepo move (`apps/web`, `apps/api`, `apps/worker`, `packages/contracts`, `packages/db`, `supabase/`, `services/ml`). Fastify skeleton (Zod-validated config, Pino, request id, error handler implementing [01-architecture.md](./01-architecture.md) section 10, `/healthz`, `/readyz`, OpenAPI generation). `supabase init` with the extensions and types migration. Docker compose (api, worker, ml-cpu, ollama). GitHub Actions (section 5). `wid-staging` Supabase project. Contracts package seeded with `common`, `errors` and `user`.
 - **Exit criteria:** `npm run dev` starts web, api and Supabase locally. CI is green on lint, typecheck, unit tests, `supabase db reset`, the gen-types diff and the OpenAPI diff. One contract test passes end to end (`GET /v1/me` stub).
 - **Dependencies:** none. **Risks:** the monorepo move breaks Next 16/Turbopack paths or the `AGENTS.md` regeneration. Mitigation: move in a dedicated PR, verify `next build`, keep root scripts as proxies.
 
@@ -107,7 +107,7 @@ External:          [Google verification ......]        [Zoom review ......]
    - The **API contract test** passes: route response schemas come from the same package, and `app.inject` integration tests assert status codes and error envelopes, including `fieldErrors` keys used by forms.
    - The **Api service adapter test** passes: replay recorded API responses through the existing `ApiAdapter` seam (no network), covering error mapping (401 to `unauthorized`, 422 to `fieldErrors`, 429 to `retryAfterSeconds`, `data.code` domain codes).
    - Staging runs with the service in api mode for at least 3 days without new Sentry errors before production.
-4. **Remove mock-only behaviour** that does not exist in API mode: the `?mockFail` and `?mockLatency` URL flags (these stay mock-only), the `wit_session_hint` writers (replaced by Supabase claims), and `listGoogleAccounts` fixtures.
+4. **Remove mock-only behaviour** that does not exist in API mode: the `?mockFail` and `?mockLatency` URL flags (these stay mock-only), the `wid_session_hint` writers (replaced by Supabase claims), and `listGoogleAccounts` fixtures.
 
 ## 3. Testing strategy
 

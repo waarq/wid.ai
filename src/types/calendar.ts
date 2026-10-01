@@ -9,7 +9,7 @@ export type ConferenceProvider =
   | "in_person"
   | "other"
 
-/** Read-only scopes WIT requests. Shown in the permission explainer before OAuth. */
+/** Read-only scopes WID requests. Shown in the permission explainer before OAuth. */
 export const CALENDAR_SCOPES = [
   "events.read",
   "titles.read",

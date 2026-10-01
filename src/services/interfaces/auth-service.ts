@@ -6,7 +6,7 @@ import type { AuthResult, AuthSession, GoogleAccountOption, GoogleSignInInput, U
  */
 export interface AuthService {
   /**
-   * Accounts to show in the WIT account chooser. Real OAuth implementations
+   * Accounts to show in the WID account chooser. Real OAuth implementations
    * may return [] and defer to the provider's own chooser.
    */
   listGoogleAccounts(): Promise<GoogleAccountOption[]>

@@ -47,7 +47,7 @@ interface ProviderCopy {
 export const INTEGRATION_COPY: Record<IntegrationProvider, ProviderCopy> = {
   google: {
     label: "Google",
-    description: "Your sign-in. WIT uses it to know who you are.",
+    description: "Your sign-in. WID uses it to know who you are.",
     icon: ShieldCheck,
     failure: "Google couldn't be reached.",
   },
@@ -59,14 +59,14 @@ export const INTEGRATION_COPY: Record<IntegrationProvider, ProviderCopy> = {
   },
   zoom: {
     label: "Zoom",
-    description: "Lets WIT work with your Zoom meetings when you choose to capture them.",
+    description: "Lets WID work with your Zoom meetings when you choose to capture them.",
     icon: Video,
     failure: "Zoom connection failed.",
   },
   slack: { label: "Slack", description: "Post meeting summaries to a channel.", icon: MessageSquare, failure: "Slack isn't available yet." },
   microsoft_calendar: {
     label: "Microsoft Calendar",
-    description: "Bring Outlook meetings into WIT.",
+    description: "Bring Outlook meetings into WID.",
     icon: CalendarDays,
     failure: "Microsoft Calendar isn't available yet.",
   },
@@ -177,7 +177,7 @@ export function IntegrationCard({ integration }: { integration: Integration }) {
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         title={`Disconnect ${copy.label}?`}
-        description="WIT will stop using this connection. Your existing meeting notes and transcripts are not deleted, and you can reconnect any time."
+        description="WID will stop using this connection. Your existing meeting notes and transcripts are not deleted, and you can reconnect any time."
         confirmLabel="Disconnect"
         variant="destructive"
         loading={disconnect.isPending}

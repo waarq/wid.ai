@@ -119,7 +119,7 @@ export function OnboardingFlow() {
         setFinished(payload)
         reset()
       },
-      onError: (error) => setStepError({ step: "zoom", message: `We couldn't finish setting up WIT. ${error.message}` }),
+      onError: (error) => setStepError({ step: "zoom", message: `We couldn't finish setting up WID. ${error.message}` }),
       onSettled: () => setPending(null),
     })
   }

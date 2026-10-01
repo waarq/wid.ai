@@ -12,7 +12,7 @@ const permissions = [
 const commitments = [
   {
     title: "You decide when to capture.",
-    body: "WIT won’t automatically record your calendar meetings. Your calendar tells WIT what is coming up, and nothing more.",
+    body: "WID won’t automatically record your calendar meetings. Your calendar tells WID what is coming up, and nothing more.",
   },
   {
     title: "Private until you share.",
@@ -33,7 +33,7 @@ export function PrivacyBlock() {
             id="privacy-title"
             eyebrow="Privacy-first"
             title="Capture is yours to start."
-            description="WIT is built around consent and control. These are product rules, not settings you have to find."
+            description="WID is built around consent and control. These are product rules, not settings you have to find."
           />
         </div>
         <div className="md:col-span-7">
@@ -47,7 +47,7 @@ export function PrivacyBlock() {
           </ul>
           <div className="mt-10">
             <p className="mb-3 font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">
-              What WIT needs access to
+              What WID needs access to
             </p>
             <ul className="grid gap-x-8 sm:grid-cols-2">
               {permissions.map((p) => (
@@ -58,7 +58,7 @@ export function PrivacyBlock() {
               ))}
             </ul>
             <p className="mt-4 text-sm text-muted-foreground">
-              WIT does not automatically record your calendar meetings.
+              WID does not automatically record your calendar meetings.
             </p>
           </div>
         </div>

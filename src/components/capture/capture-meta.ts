@@ -36,4 +36,4 @@ export const PROCESSING_STEPS: readonly { id: ProcessingStepId; label: string }[
 ]
 
 export const MANUAL_CAPTURE_COPY =
-  "Nothing is recorded automatically. WIT starts only when you press Start capture, and you can pause or stop at any time."
+  "Nothing is recorded automatically. WID starts only when you press Start capture, and you can pause or stop at any time."

@@ -49,7 +49,7 @@ export function NotificationsSection({ notifications }: { notifications: Notific
       <div className="grid gap-1">
         <h3 className="text-sm font-medium">Delivery</h3>
         <div className="divide-y divide-border border-y border-border">
-          <SwitchField control={form.control} name="channels.inApp" label="In WIT" description="Show notifications in the bell menu and Alerts." />
+          <SwitchField control={form.control} name="channels.inApp" label="In WID" description="Show notifications in the bell menu and Alerts." />
           <SwitchField control={form.control} name="channels.email" label="Email" description="Also send them to your Google account email." />
         </div>
         {channelError ? (

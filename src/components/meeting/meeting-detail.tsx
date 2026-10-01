@@ -186,7 +186,7 @@ function ReadyMeeting({ meeting }: { meeting: Meeting }) {
       <div className="grid grid-cols-2 gap-2 lg:hidden">
         <Button variant="outline" onClick={() => setSheet("assistant")}>
           <MessageSquareText data-icon="inline-start" aria-hidden />
-          Ask WIT
+          Ask WID
         </Button>
         <Button variant="outline" onClick={() => setSheet("info")}>
           <Info data-icon="inline-start" aria-hidden />
@@ -261,7 +261,7 @@ function ReadyMeeting({ meeting }: { meeting: Meeting }) {
       <Sheet open={sheet === "assistant"} onOpenChange={(open) => setSheet(open ? "assistant" : null)}>
         <SheetContent side="bottom" className="rounded-t-xl px-4 data-[side=bottom]:h-[85dvh] pb-[max(1rem,env(safe-area-inset-bottom))]">
           <SheetHeader className="px-0">
-            <SheetTitle>Ask WIT</SheetTitle>
+            <SheetTitle>Ask WID</SheetTitle>
             <SheetDescription className="sr-only">Ask questions about {meeting.title}.</SheetDescription>
           </SheetHeader>
           <MeetingAssistant

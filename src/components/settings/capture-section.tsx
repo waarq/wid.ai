@@ -44,7 +44,7 @@ export function CaptureSection({ capture }: { capture: CaptureSettings }) {
     <SettingsForm
       form={form}
       title="Capture"
-      description="How WIT captures meetings. Capture always starts with you."
+      description="How WID captures meetings. Capture always starts with you."
       saving={saving}
       error={error}
       saved={saved}
@@ -60,7 +60,7 @@ export function CaptureSection({ capture }: { capture: CaptureSettings }) {
             Manual capture
           </h3>
           <p className="text-sm text-muted-foreground">
-            WIT will not automatically record calendar meetings. A meeting is captured only when you start it.
+            WID will not automatically record calendar meetings. A meeting is captured only when you start it.
           </p>
         </div>
         <Badge variant="success" className="gap-1">
@@ -96,7 +96,7 @@ export function CaptureSection({ capture }: { capture: CaptureSettings }) {
           Meetings available for capture
         </p>
         <p id={`${prefId}-hint`} className="text-sm text-muted-foreground">
-          Which meetings WIT offers a Capture button for. None of these start recording on their own.
+          Which meetings WID offers a Capture button for. None of these start recording on their own.
         </p>
         <Controller
           control={form.control}

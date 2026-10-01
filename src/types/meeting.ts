@@ -57,7 +57,7 @@ export interface Participant extends PersonRef {
   /** Outside the user's workspace (e.g. a client). */
   isExternal: boolean
   company?: string
-  /** Set when the participant is a WIT user in the workspace. */
+  /** Set when the participant is a WID user in the workspace. */
   userId?: string
 }
 

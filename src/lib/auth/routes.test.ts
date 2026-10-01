@@ -107,7 +107,7 @@ describe("session hint", () => {
     expect(parseSessionHint("v2.ready")).toBe("unauthenticated")
     expect(parseSessionHint("v1.admin")).toBe("unauthenticated")
     expect(parseSessionHint("%E0%A4%A")).toBe("unauthenticated")
-    expect(readSessionHintFromCookieString("a=1; wit_session_hint=v1.ready; b=2")).toBe("ready")
+    expect(readSessionHintFromCookieString("a=1; wid_session_hint=v1.ready; b=2")).toBe("ready")
     expect(readSessionHintFromCookieString("a=1")).toBe("unauthenticated")
   })
 })

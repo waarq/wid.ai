@@ -58,7 +58,7 @@ export const useUIStore = create<UIState>()(
         set((s) => ({ commandPaletteOpen: !s.commandPaletteOpen })),
     }),
     {
-      name: "wit-ui",
+      name: "wid-ui",
       storage: createJSONStorage(() =>
         typeof window === "undefined" ? noopStorage : safeStorage
       ),

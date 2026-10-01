@@ -95,7 +95,7 @@ export function ProfileMenu() {
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        title="Sign out of WIT?"
+        title="Sign out of WID?"
         description="Meetings in progress keep recording only while this tab stays open. You can sign back in any time."
         confirmLabel="Sign out"
         variant="destructive"

@@ -97,7 +97,7 @@ export function AskMeetingDemo({ meetingTitle, items }: AskMeetingDemoProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 260, damping: 26 }}
               >
-                <Eyebrow className="mb-2">WIT</Eyebrow>
+                <Eyebrow className="mb-2">WID</Eyebrow>
                 <p className="text-sm leading-relaxed">{selected.answer}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {selected.sources.map((source) => (

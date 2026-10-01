@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 
-const SITE_NAME = "WIT"
+const SITE_NAME = "WID"
 
 export const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
 
 interface PageMeta {
-  /** Exact document title, e.g. "WIT Features". */
+  /** Exact document title, e.g. "WID Features". */
   title: string
   description: string
   /** Path used for the canonical URL and OpenGraph url, e.g. "/features". */

@@ -30,7 +30,7 @@ import { safeLocalStorage } from "./storage"
  */
 
 export const ONBOARDING_STORE_VERSION = 1
-const STORAGE_KEY = "wit-onboarding-draft"
+const STORAGE_KEY = "wid-onboarding-draft"
 
 export type OnboardingDraft = Partial<OnboardingData>
 

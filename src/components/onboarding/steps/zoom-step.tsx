@@ -20,7 +20,7 @@ export function ZoomStep(props: StepProps) {
       onBack={props.onBack}
       focusHeading={props.focusHeading}
       title="Connect Zoom"
-      description="WIT requires a Zoom connection to capture Zoom meetings. Google Meet and in-person meetings work without it."
+      description="WID requires a Zoom connection to capture Zoom meetings. Google Meet and in-person meetings work without it."
       hideContinue={!connected}
       continueLabel="Finish setup"
       onSubmit={() => props.onSave({ step: "zoom", data: { zoomConnected: true } })}

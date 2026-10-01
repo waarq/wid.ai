@@ -5,7 +5,7 @@ import { getSafeNextPath } from "@/lib/auth/routes"
 
 export const metadata: Metadata = {
   title: "Create your account",
-  description: "Create your WIT account with Google.",
+  description: "Create your WID account with Google.",
   robots: { index: false },
 }
 

@@ -74,8 +74,8 @@ function PersonalizeForm({ profile, ...props }: StepProps & { profile: User | nu
       onRetry={props.onRetry}
       onBack={props.onBack}
       focusHeading={props.focusHeading}
-      title="Personalize your WIT"
-      description="A few details so WIT greets you properly and shows meeting times in your timezone."
+      title="Personalize your WID"
+      description="A few details so WID greets you properly and shows meeting times in your timezone."
       onSubmit={() => void submit()}
     >
       <div className="grid gap-8">
@@ -147,7 +147,7 @@ function PersonalizeForm({ profile, ...props }: StepProps & { profile: User | nu
 
         <div className="grid gap-3">
           <p id={goalsId} className="text-sm font-medium text-foreground">
-            What do you want WIT to help you with?{" "}
+            What do you want WID to help you with?{" "}
             <span className="font-normal text-muted-foreground">Optional</span>
           </p>
           <Controller

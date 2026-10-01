@@ -31,7 +31,7 @@ export function Problem() {
       </div>
 
       <figure
-        aria-label="How WIT turns a conversation into decisions, actions, questions, context and follow-ups"
+        aria-label="How WID turns a conversation into decisions, actions, questions, context and follow-ups"
         className="mt-20 grid items-stretch gap-6 border-y border-border py-8 md:mt-28 md:grid-cols-[1fr_auto_1fr_auto_1.2fr] md:gap-8"
       >
         <div>
@@ -44,7 +44,7 @@ export function Problem() {
         <FlowArrow />
         <div>
           <Eyebrow className="mb-3">Process</Eyebrow>
-          <p className="text-xl font-semibold tracking-tight">WIT understands it</p>
+          <p className="text-xl font-semibold tracking-tight">WID understands it</p>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             It reads the transcript, separates what was decided from what was discussed, and keeps the source of each point.
           </p>

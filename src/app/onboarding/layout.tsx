@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import type { ReactNode } from "react"
 
 export const metadata: Metadata = {
-  title: "Set up WIT",
-  description: "Connect your calendar and tell WIT what matters to you.",
+  title: "Set up WID",
+  description: "Connect your calendar and tell WID what matters to you.",
   robots: { index: false },
 }
 

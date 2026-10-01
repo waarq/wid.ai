@@ -139,7 +139,7 @@ const CUSTOMER: Template = {
     { role: "c", at: t("00:20"), core: true, text: "Sure. Right now the notes live in the head of whoever ran the call, and maybe a shared doc if we're lucky." },
     { role: "h", at: t("00:44"), text: "When something gets missed, where does it usually break down?" },
     { role: "c", at: t("01:02"), core: true, text: "Commitments. Someone promises a customer a date, and two weeks later nobody remembers who said it." },
-    { role: "a", at: t("01:30"), text: "That's exactly what WIT tracks. Every commitment links back to the moment it was said." },
+    { role: "a", at: t("01:30"), text: "That's exactly what WID tracks. Every commitment links back to the moment it was said." },
     { role: "c", at: t("01:52"), core: true, text: "That would help. The other thing is we can't have anything recording automatically. Our clients would object." },
     { role: "h", at: t("02:15"), core: true, text: "Understood. Capture is always manual. Nothing records unless someone on your side starts it." },
     { role: "c", at: t("02:40"), core: true, text: "Good. Where would the notes be stored? Our IT team will ask about data location." },

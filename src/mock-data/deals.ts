@@ -26,7 +26,7 @@ const vertexMeetings = [meetingIdOf("leadership_sync")]
 const atlasMeetings = [meetingIdOf("leadership_sync"), meetingIdOf("customer_research")]
 const crescentMeetings = [meetingIdOf("leadership_sync")]
 
-/** Demo companies only. None of these are real WIT customers. */
+/** Demo companies only. None of these are real WID customers. */
 export const deals: Deal[] = [
   {
     id: "deal_meridian_freight",

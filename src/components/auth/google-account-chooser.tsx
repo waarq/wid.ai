@@ -43,7 +43,7 @@ function initials(name: string): string {
 }
 
 /*
- * WIT's own account chooser for "Continue with Google". It simulates the
+ * WID's own account chooser for "Continue with Google". It simulates the
  * account-selection step without copying Google's UI. With real OAuth,
  * listGoogleAccounts() may return [] and the provider's chooser takes over.
  */
@@ -130,7 +130,7 @@ export function GoogleAccountChooser({ open, onOpenChange, intent, next }: Googl
                   {result.session.stage === "ready" ? "Welcome back" : "Welcome"}, {result.session.user.firstName}.
                 </DialogTitle>
                 <DialogDescription className="text-base">
-                  {result.session.stage === "ready" ? "Opening your meetings." : "Let's set up WIT."}
+                  {result.session.stage === "ready" ? "Opening your meetings." : "Let's set up WID."}
                 </DialogDescription>
               </DialogHeader>
               <div className="h-0.5 w-full overflow-hidden rounded-full bg-border" aria-hidden>
@@ -163,7 +163,7 @@ export function GoogleAccountChooser({ open, onOpenChange, intent, next }: Googl
                 </p>
                 <DialogTitle className="text-lg font-semibold tracking-tight">Select an account</DialogTitle>
                 <DialogDescription>
-                  The account you choose becomes your WIT profile. Demo accounts, no real Google sign-in.
+                  The account you choose becomes your WID profile. Demo accounts, no real Google sign-in.
                 </DialogDescription>
               </DialogHeader>
 
@@ -340,7 +340,7 @@ function OtherAccountForm({ pending, error, onBack, onSubmit }: OtherAccountForm
           Continue with Google
         </p>
         <DialogTitle className="text-lg font-semibold tracking-tight">Use another account</DialogTitle>
-        <DialogDescription>Enter the Google account email you want to use with WIT.</DialogDescription>
+        <DialogDescription>Enter the Google account email you want to use with WID.</DialogDescription>
       </DialogHeader>
       <div className="grid gap-2 px-5 py-5">
         <Label htmlFor={emailId}>Email</Label>

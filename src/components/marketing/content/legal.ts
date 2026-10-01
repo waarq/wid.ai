@@ -9,7 +9,7 @@ export const privacySections: LegalSection[] = [
   {
     title: "About this page",
     body: [
-      "WIT is currently a product demonstration. This summary describes how the product is designed to treat your information, and what the demo itself does. It is not legal advice and will be replaced by a full policy before any real launch.",
+      "WID is currently a product demonstration. This summary describes how the product is designed to treat your information, and what the demo itself does. It is not legal advice and will be replaced by a full policy before any real launch.",
     ],
   },
   {
@@ -27,7 +27,7 @@ export const privacySections: LegalSection[] = [
   {
     title: "Capture is manual",
     body: [
-      "WIT does not automatically schedule, join, record or capture your meetings. Connecting a calendar gives WIT context only. You are responsible for telling participants that a meeting is being captured and for following the rules that apply to you.",
+      "WID does not automatically schedule, join, record or capture your meetings. Connecting a calendar gives WID context only. You are responsible for telling participants that a meeting is being captured and for following the rules that apply to you.",
     ],
   },
   {
@@ -48,7 +48,7 @@ export const termsSections: LegalSection[] = [
   {
     title: "About these terms",
     body: [
-      "These terms apply to this demonstration of WIT. They are a short, plain-language placeholder and not legal advice. A complete agreement will replace them before any commercial release.",
+      "These terms apply to this demonstration of WID. They are a short, plain-language placeholder and not legal advice. A complete agreement will replace them before any commercial release.",
     ],
   },
   {
@@ -60,13 +60,13 @@ export const termsSections: LegalSection[] = [
   {
     title: "Recording and consent",
     body: [
-      "If you use WIT to capture a real meeting in the future, you are responsible for getting any consent that applies and for informing participants. WIT never starts a capture on its own.",
+      "If you use WID to capture a real meeting in the future, you are responsible for getting any consent that applies and for informing participants. WID never starts a capture on its own.",
     ],
   },
   {
     title: "AI-generated content",
     body: [
-      "Summaries, decisions, action items and answers can be wrong. WIT links each one to its source so you can check it. Please verify anything important against the conversation.",
+      "Summaries, decisions, action items and answers can be wrong. WID links each one to its source so you can check it. Please verify anything important against the conversation.",
     ],
   },
   {

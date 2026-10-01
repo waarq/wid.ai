@@ -12,8 +12,8 @@ const ContactForm = dynamic(
 )
 
 export const metadata = createMetadata({
-  title: "Contact WIT",
-  description: "Questions about WIT, plans or this demo? Send us a message.",
+  title: "Contact WID",
+  description: "Questions about WID, plans or this demo? Send us a message.",
   path: "/contact",
 })
 
@@ -23,7 +23,7 @@ export default function ContactPage() {
       <PageIntro
         eyebrow="Contact"
         title="Tell us what you are trying to solve."
-        description="Questions about plans, the demo, or how WIT would fit your meetings."
+        description="Questions about plans, the demo, or how WID would fit your meetings."
       />
       <section aria-label="Contact form" className="border-t border-border py-16 md:py-24">
         <Container className="grid gap-12 md:grid-cols-12 md:gap-8">

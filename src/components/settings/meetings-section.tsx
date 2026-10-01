@@ -14,7 +14,7 @@ import { useSectionSave } from "./use-section-save"
 
 const schema = z.object({
   defaultSharing: z.enum(SHARING_PREFERENCES),
-  meetingFocus: z.array(z.enum(MEETING_FOCUS_OPTIONS)).min(1, "Choose at least one thing for WIT to look for."),
+  meetingFocus: z.array(z.enum(MEETING_FOCUS_OPTIONS)).min(1, "Choose at least one thing for WID to look for."),
 })
 type Values = z.infer<typeof schema>
 
@@ -65,7 +65,7 @@ export function MeetingsSection({ meetings }: { meetings: MeetingSettings }) {
           Meeting focus
         </p>
         <p id={`${focusId}-hint`} className="text-sm text-muted-foreground">
-          What WIT pays attention to when it understands a meeting.
+          What WID pays attention to when it understands a meeting.
         </p>
         <Controller
           control={form.control}

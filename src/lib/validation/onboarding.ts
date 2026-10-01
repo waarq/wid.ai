@@ -55,7 +55,7 @@ export const sharingStepSchema = z.object({
 export const focusStepSchema = z.object({
   meetingFocus: z
     .array(z.enum(MEETING_FOCUS_OPTIONS))
-    .min(1, "Choose at least one thing for WIT to pay attention to."),
+    .min(1, "Choose at least one thing for WID to pay attention to."),
 })
 
 export const jobFunctionStepSchema = z.object({

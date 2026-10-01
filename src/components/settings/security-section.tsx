@@ -64,7 +64,7 @@ export function SecuritySection({ security }: { security: SecuritySettings }) {
       <div className="grid gap-1 border-y border-border py-4">
         <h3 className="text-sm font-medium">Sign-in method</h3>
         <p className="text-sm text-muted-foreground">
-          You sign in with Google. WIT never stores a password, and access is managed in your Google account.
+          You sign in with Google. WID never stores a password, and access is managed in your Google account.
         </p>
       </div>
 

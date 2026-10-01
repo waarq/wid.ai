@@ -35,7 +35,7 @@ export const featureCopy = {
     eyebrow: "Ask the meeting",
     title: "Get the moment, not just an answer.",
     description:
-      "Ask a question about a meeting and WIT answers with the exact timestamps it used, so you can check instead of trust. The demo answers below are pre-written.",
+      "Ask a question about a meeting and WID answers with the exact timestamps it used, so you can check instead of trust. The demo answers below are pre-written.",
   },
   search: {
     id: "meeting-memory",
@@ -49,13 +49,13 @@ export const featureCopy = {
     eyebrow: "Meeting history",
     title: "See how a decision changed.",
     description:
-      "When a decision moves from one meeting to the next, WIT keeps the whole trail: when it changed, what it changed to, and the conversation behind each step.",
+      "When a decision moves from one meeting to the next, WID keeps the whole trail: when it changed, what it changed to, and the conversation behind each step.",
   },
   followUp: {
     id: "follow-up",
     eyebrow: "Follow-up",
     title: "Draft the follow-up while it is fresh.",
     description:
-      "WIT drafts a follow-up from the decisions and next steps. Copy it, edit it and send it from your own email. Nothing is sent for you.",
+      "WID drafts a follow-up from the decisions and next steps. Copy it, edit it and send it from your own email. Nothing is sent for you.",
   },
 } satisfies Record<string, FeatureCopy>

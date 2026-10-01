@@ -53,7 +53,7 @@ export function AppearanceSection({ appearance }: { appearance: AppearanceSettin
 
   return (
     <div className="grid gap-6">
-      <SectionHeading title="Appearance" description="How WIT looks on your devices." />
+      <SectionHeading title="Appearance" description="How WID looks on your devices." />
       <div className="grid gap-2">
         <p id="theme-label" className="text-sm font-medium">
           Theme

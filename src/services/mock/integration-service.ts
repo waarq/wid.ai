@@ -65,7 +65,7 @@ export function disconnectOp(db: MockDb, provider: IntegrationProvider): Integra
     throw new AppException("service_unavailable", { message: "This integration is coming later." })
   }
   if (provider === "google") {
-    throw new AppException("forbidden", { message: "Google is how you sign in to WIT, so it can't be disconnected." })
+    throw new AppException("forbidden", { message: "Google is how you sign in to WID, so it can't be disconnected." })
   }
   Object.assign(integration, { status: "disconnected", accountLabel: undefined, connectedAt: undefined, settings: null })
   return integration

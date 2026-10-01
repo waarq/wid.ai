@@ -6,20 +6,20 @@ Status: draft v1. This is the hardest part of the system and the part with the m
 
 ---
 
-## 1. How audio actually gets into WIT: options
+## 1. How audio actually gets into WID: options
 
 | Option | What it captures | Works for | Manual-capture fit | Effort | Verdict |
 | --- | --- | --- | --- | --- | --- |
 | **(a) Browser capture**: `getDisplayMedia` (tab or system audio) + `getUserMedia` (mic), `MediaRecorder`, chunked upload | Remote participants (tab/system audio) + the user's mic | Google Meet, Zoom web client, Teams web, any browser-based call, **on Chromium**. Zoom/Teams desktop apps only where system audio is capturable (below). In-person meetings via mic only. | Perfect: the browser forces a user gesture plus a picker every time | M (3 to 4 weeks) | **Phase 1, primary path** |
 | **(b) Manual file upload** (TUS resumable) | Any recording the user already has | Everything (phone voice memos, Zoom local recordings, exported Meet recordings) | Perfect | S (1 week, reuses the pipeline) | **Phase 1** |
 | **(c) Zoom cloud-recording import** (OAuth + `recording.completed` webhook) | Zoom's own recording (optionally per-participant audio tracks) | Zoom paid accounts with cloud recording enabled, user is host or has access | Good, **if** import is user-initiated (per recording, or per meeting opt-in). Zoom shows its own recording notice to participants. | M (2 to 3 weeks + marketplace review) | **Phase 2 (M9)** |
-| **(d1) Meeting bots** (Zoom Meeting SDK / Recall-style) | Full meeting incl. per-speaker streams | Zoom, Meet, Teams | Possible only as an explicit "Send WIT to this meeting" action. Bots are visible participants, which helps with consent. | L. Since 2026-03-02 Zoom requires OBF/ZAK tokens for Meeting SDK apps joining meetings outside the app's account [verified: [Zoom OBF FAQ](https://developers.zoom.us/docs/meeting-sdk/obf-faq/)]. Meet has no official bot API. Headless browser fleets are fragile. | **Deferred.** Revisit with a vendor (Recall.ai etc.) if Phase 1 + 2 coverage proves insufficient. |
+| **(d1) Meeting bots** (Zoom Meeting SDK / Recall-style) | Full meeting incl. per-speaker streams | Zoom, Meet, Teams | Possible only as an explicit "Send WID to this meeting" action. Bots are visible participants, which helps with consent. | L. Since 2026-03-02 Zoom requires OBF/ZAK tokens for Meeting SDK apps joining meetings outside the app's account [verified: [Zoom OBF FAQ](https://developers.zoom.us/docs/meeting-sdk/obf-faq/)]. Meet has no official bot API. Headless browser fleets are fragile. | **Deferred.** Revisit with a vendor (Recall.ai etc.) if Phase 1 + 2 coverage proves insufficient. |
 | **(d2) Desktop agent** (Electron/Tauri; ScreenCaptureKit on macOS, WASAPI loopback on Windows) | System audio + mic for **any** app, incl. Zoom/Teams desktop on macOS | All desktop meeting apps | Perfect (user presses Start) | L (code signing, notarization, auto-update, two OS audio stacks, support load) | **Deferred.** Trigger: more than 30% of capture attempts are "Zoom/Teams desktop on Mac" and they fall back to upload. |
 | **(e) Google Meet** | (a) works in a Chrome tab. Meet REST API exposes recordings/transcripts as Drive artifacts for Workspace accounts [verified: [Meet API artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts)] | Meet in Chrome / Workspace accounts with recording | (a) perfect. API import would be user-initiated. | API import needs Drive read access to the organizer's files, which pulls in **restricted** Drive scopes (CASA security assessment) | Use (a). **Defer Meet API import** until there's demand that justifies a CASA assessment. |
 
 ### 1.1 Browser capability matrix (the main limitation of option a)
 
-| Browser | Tab audio | Whole-system audio | Mic | Result in WIT |
+| Browser | Tab audio | Whole-system audio | Mic | Result in WID |
 | --- | --- | --- | --- | --- |
 | Chrome / Edge, Windows & ChromeOS | yes | yes | yes | Full capture: browser calls + desktop apps (system audio) |
 | Chrome / Edge, macOS | yes | Chrome 141+ on macOS 14.2+ reportedly yes [unverified: verify on real hardware before promising it] | yes | Browser calls fully. Desktop apps only if the system-audio path is confirmed. |
@@ -29,7 +29,7 @@ Status: draft v1. This is the hardest part of the system and the part with the m
 
 Source: [MDN getDisplayMedia](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia), [caniuse systemAudio](https://caniuse.com/mdn-api_mediadevices_getdisplaymedia_systemaudio_option), [addpipe on Chrome macOS system audio](https://blog.addpipe.com/getdisplaymedia-allows-capturing-the-screen-with-system-sounds-on-chrome-on-macos/).
 
-Mic-only mode records only what the user's microphone hears. With headphones, that's the user alone. The UI must say so plainly before start: "In this browser WIT can only hear your microphone. For full meetings use Chrome, or upload the recording afterwards." This is copy in the capture start dialog. The frontend `StartCaptureInput` gains `sources` in the client info.
+Mic-only mode records only what the user's microphone hears. With headphones, that's the user alone. The UI must say so plainly before start: "In this browser WID can only hear your microphone. For full meetings use Chrome, or upload the recording afterwards." This is copy in the capture start dialog. The frontend `StartCaptureInput` gains `sources` in the client info.
 
 ### 1.2 Recommendation and phased rollout
 
@@ -81,7 +81,7 @@ getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGain
 
 ```text
 MediaRecorder.ondataavailable(blob)
-   └─▶ IndexedDB 'wit-capture' store { sessionId, seq, part, blob, sha256, state:'pending' }   (durable first)
+   └─▶ IndexedDB 'wid-capture' store { sessionId, seq, part, blob, sha256, state:'pending' }   (durable first)
          └─▶ upload worker (in page, concurrency 2, ordered by seq):
                supabase.storage.from('capture-chunks').upload(path, blob, { upsert: false })   (user JWT; storage RLS
                                                                                               allows only own live prefix)
@@ -326,9 +326,9 @@ Empty results are valid: a meeting with no decisions shows none. "No speech" is 
 
 ### 6.9 `meeting.finalize`, embeddings, notifications
 
-- `meeting.finalize` (one transaction): insert the summary rows, set the current run, refresh `meetings.search_tsv`, mark steps complete, set the meeting to `ready` (Realtime `meeting.status` fires from the trigger), create a `meeting_ready` alert for the owner if `notify_processing_completed`, create `mention` alerts for WIT-user assignees other than the owner who can read the meeting and have `notify_mentions`, and enqueue `embed.index`, `ai.link_decisions` and `retention.purge_audio` (only for `transcript_only`).
+- `meeting.finalize` (one transaction): insert the summary rows, set the current run, refresh `meetings.search_tsv`, mark steps complete, set the meeting to `ready` (Realtime `meeting.status` fires from the trigger), create a `meeting_ready` alert for the owner if `notify_processing_completed`, create `mention` alerts for WID-user assignees other than the owner who can read the meeting and have `notify_mentions`, and enqueue `embed.index`, `ai.link_decisions` and `retention.purge_audio` (only for `transcript_only`).
 - `embed.index`: build chunks (see [02-data-model.md](./02-data-model.md) section 12), embed in batches of 32 (`EmbeddingProvider.embed(texts) -> number[][]`, `bge-m3` through Ollama `/api/embed`, or hosted), and insert. Until it finishes, search uses FTS only for this meeting. Nothing breaks.
-- `ai.link_decisions` (M8): for each decision with a `subject_key`, find earlier decisions in the same org, readable by the owner, with an embedding similarity of 0.85 or more and the same subject. Then an LLM confirms "does B replace A?". On yes, set `supersedes_decision_id` and create `decision_changed` alerts (with `change.from/to` from `value_label`) for WIT users who can read both meetings.
+- `ai.link_decisions` (M8): for each decision with a `subject_key`, find earlier decisions in the same org, readable by the owner, with an embedding similarity of 0.85 or more and the same subject. Then an LLM confirms "does B replace A?". On yes, set `supersedes_decision_id` and create `decision_changed` alerts (with `change.from/to` from `value_label`) for WID users who can read both meetings.
 - `notify.action_due` (pg_cron, hourly): for each user whose local time is 09:00, find open items they're assigned (or own, when unassigned) due tomorrow and not yet alerted. `dedupe_key = 'action_due:<id>:<due_date>'`.
 
 ---

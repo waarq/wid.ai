@@ -18,7 +18,7 @@ interface Tab {
 const tabs: Tab[] = [
   {
     id: "teams",
-    label: "WIT for teams",
+    label: "WID for teams",
     title: "Shared visibility. Smarter execution.",
     body: [
       "Share the meetings that matter with attendees or your whole team, so decisions are visible and follow-through is consistent.",
@@ -33,7 +33,7 @@ const tabs: Tab[] = [
   },
   {
     id: "individuals",
-    label: "WIT for individuals",
+    label: "WID for individuals",
     title: "A memory for your own meetings.",
     body: [
       "Everything stays private until you decide to share it. Capture a meeting, read the brief, and move on.",

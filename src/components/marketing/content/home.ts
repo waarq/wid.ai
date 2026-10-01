@@ -60,19 +60,19 @@ export const steps: Step[] = [
   {
     number: "01",
     title: "Connect your calendar",
-    body: "Connect Google Calendar so WIT understands your meeting schedule. WIT reads titles, times and attendees, and nothing else.",
+    body: "Connect Google Calendar so WID understands your meeting schedule. WID reads titles, times and attendees, and nothing else.",
     note: "Connecting your calendar does not automatically record meetings.",
   },
   {
     number: "02",
     title: "Capture when you want",
     body: "Choose a meeting and manually start capture. You can pause and stop at any time, and every meeting is private until you share it.",
-    note: "No automatic recording by default. WIT never joins a call on its own.",
+    note: "No automatic recording by default. WID never joins a call on its own.",
   },
   {
     number: "03",
-    title: "WIT understands the conversation",
-    body: "After the meeting, WIT shows its progress and then produces:",
+    title: "WID understands the conversation",
+    body: "After the meeting, WID shows its progress and then produces:",
     list: [
       "Transcript",
       "Summary",

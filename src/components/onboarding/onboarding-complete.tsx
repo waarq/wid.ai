@@ -72,7 +72,7 @@ export function OnboardingComplete({ data }: OnboardingCompleteProps) {
             You&apos;re ready.
           </h1>
           <p className="text-[0.9375rem] text-muted-foreground">
-            WIT is set up for you{data.firstName ? `, ${data.firstName}` : ""}. Nothing is captured until you start
+            WID is set up for you{data.firstName ? `, ${data.firstName}` : ""}. Nothing is captured until you start
             it.
           </p>
         </div>
@@ -100,7 +100,7 @@ export function OnboardingComplete({ data }: OnboardingCompleteProps) {
         <div>
           <Button asChild size="lg" className="px-4">
             <Link href={APP_HOME_PATH} replace>
-              Go to WIT
+              Go to WID
               <ArrowRight aria-hidden />
             </Link>
           </Button>

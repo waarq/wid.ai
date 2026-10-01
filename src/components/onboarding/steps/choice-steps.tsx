@@ -71,8 +71,8 @@ export function EmailTypeStep(props: StepProps) {
     <OnboardingQuestion
       {...common(props)}
       titleId={titleId}
-      eyebrow={firstName ? `Welcome, ${firstName}. Let's set up WIT.` : "Let's set up WIT."}
-      title="How will you use WIT?"
+      eyebrow={firstName ? `Welcome, ${firstName}. Let's set up WID.` : "Let's set up WID."}
+      title="How will you use WID?"
       description="Which email did you use to sign in? This shapes your setup and account. We ask rather than guess from your email address."
       onSubmit={submit}
     >
@@ -112,12 +112,12 @@ export function CaptureStep(props: StepProps) {
     <OnboardingQuestion
       {...common(props)}
       titleId={titleId}
-      title="Which meetings should WIT take notes on?"
+      title="Which meetings should WID take notes on?"
       description={
         <p className="grid grid-cols-[auto_1fr] items-start gap-2.5">
           <Info aria-hidden className="mt-1 size-4 text-primary" />
           <span>
-            Your calendar helps WIT understand your schedule. It does not mean WIT automatically records your
+            Your calendar helps WID understand your schedule. It does not mean WID automatically records your
             meetings. Whatever you pick, you start every capture yourself.
           </span>
         </p>
@@ -192,10 +192,10 @@ export function FocusStep(props: StepProps) {
     <OnboardingQuestion
       {...common(props)}
       titleId={titleId}
-      title="What should WIT pay attention to?"
+      title="What should WID pay attention to?"
       description={
         <>
-          Choose as many as you like. WIT highlights these in every meeting brief.{" "}
+          Choose as many as you like. WID highlights these in every meeting brief.{" "}
           <span className="text-foreground">You can change these later.</span>
         </>
       }
@@ -241,7 +241,7 @@ export function JobFunctionStep(props: StepProps) {
       {...common(props)}
       titleId={titleId}
       title="What best describes your job function?"
-      description="WIT uses this to decide what to surface first: your dashboard, summary emphasis, action items and suggested questions."
+      description="WID uses this to decide what to surface first: your dashboard, summary emphasis, action items and suggested questions."
       onSubmit={submit}
     >
       <JobFunctionSelector

@@ -34,7 +34,7 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="right" className="w-[min(88vw,22rem)] gap-0 p-0 sm:max-w-sm">
         <SheetHeader className="border-b border-border p-5 pr-14">
-          <SheetTitle className="text-base font-semibold tracking-tight">WIT</SheetTitle>
+          <SheetTitle className="text-base font-semibold tracking-tight">WID</SheetTitle>
           <SheetDescription className="text-sm">AI meeting intelligence</SheetDescription>
         </SheetHeader>
         <nav aria-label="Mobile" className="flex flex-1 flex-col overflow-y-auto p-2">

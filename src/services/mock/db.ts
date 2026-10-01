@@ -56,7 +56,7 @@ import { createId, nowIso } from "./utils"
 type MockData = typeof MockDataModule
 
 const SCHEMA_VERSION = 1
-const SNAPSHOT_KEY = "wit-mock-db"
+const SNAPSHOT_KEY = "wid-mock-db"
 const FIVE_MINUTES = 5 * 60_000
 const SESSION_TTL_MS = 7 * 24 * 60 * 60_000
 /** Statuses that count towards "N actions" on cards and in stats. */
@@ -343,7 +343,7 @@ export class MockDb {
     const db = new MockDb(data)
     mockControls.onReset(() => db.reset())
     if (typeof window !== "undefined") {
-      window.__WIT_MOCK__ = mockControls
+      window.__WID_MOCK__ = mockControls
       window.addEventListener("pagehide", () => db.flush())
     }
     return db

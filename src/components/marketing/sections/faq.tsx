@@ -34,7 +34,7 @@ export function Faq({ items = faqItems, headingAs = "h2", structuredData = false
             id="faq-title"
             eyebrow="Questions"
             title="Straight answers."
-            description="What WIT does, what it does not do, and what is simulated in this demo."
+            description="What WID does, what it does not do, and what is simulated in this demo."
           />
         </div>
         <div className="md:col-span-8">

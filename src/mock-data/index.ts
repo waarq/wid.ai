@@ -1,5 +1,5 @@
 /**
- * Fictional demo data for the WIT prototype. Only `services/mock` imports this
+ * Fictional demo data for the WID prototype. Only `services/mock` imports this
  * barrel; UI code reads data through hooks and services. Every date derives
  * from MOCK_NOW, so server and client renders always match.
  */

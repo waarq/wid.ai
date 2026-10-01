@@ -25,8 +25,8 @@ import { getAskDemoData } from "@/components/marketing/data"
 import { faqItems } from "@/components/marketing/content/faq"
 
 export const metadata = createMetadata({
-  title: "WIT — AI Meeting Intelligence",
-  description: "WIT turns meetings into clear notes, decisions, action items and searchable knowledge.",
+  title: "WID — AI Meeting Intelligence",
+  description: "WID turns meetings into clear notes, decisions, action items and searchable knowledge.",
   path: "/",
 })
 
@@ -62,7 +62,7 @@ export default function HomePage() {
       <LandingHero />
       <ProofStrip />
 
-      <section id="spotlight" aria-label="What WIT gives you" className="relative scroll-mt-4 border-t border-border py-24 md:py-32">
+      <section id="spotlight" aria-label="What WID gives you" className="relative scroll-mt-4 border-t border-border py-24 md:py-32">
         <Container>
           <Spotlight items={spotlight} />
         </Container>
@@ -75,7 +75,7 @@ export default function HomePage() {
         <SectionHeading
           id="audience-title"
           className="mx-auto mb-14 max-w-3xl text-center [&_h2]:font-light [&_h2]:tracking-[-0.03em]"
-          title="Whether it’s just you or the whole team, WIT has your back."
+          title="Whether it’s just you or the whole team, WID has your back."
         />
         <Audience />
       </Section>

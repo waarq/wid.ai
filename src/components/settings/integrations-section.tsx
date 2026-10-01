@@ -27,7 +27,7 @@ export function IntegrationsSection() {
 
   return (
     <div className="grid gap-6">
-      <SectionHeading title="Integrations" description="Connect the tools WIT works with. Connecting never starts a recording." />
+      <SectionHeading title="Integrations" description="Connect the tools WID works with. Connecting never starts a recording." />
       {integrations.isPending ? (
         <div role="status" aria-busy="true" className="grid gap-4">
           <span className="sr-only">Loading integrations</span>

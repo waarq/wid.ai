@@ -1,4 +1,4 @@
-# WIT backend implementation plan
+# WID (Wrote It Down) backend implementation plan
 
 Status: draft v1, 2026-10-01. Scope: everything needed for the real backend to replace the mock services in `src/services/mock` without UI rewrites, while keeping the PRD's two hard rules: **manual capture only** and **every insight traceable to a meeting, a transcript segment and a timestamp**.
 
@@ -65,7 +65,7 @@ The demo slice needs only a subset of these, with `src/contracts` in place of `p
 | --- | --- | --- |
 | Read `data.code` from error bodies when it's a valid `AppErrorCode`; map 503 to `service_unavailable` | `src/lib/api/http-errors.ts` | M1 |
 | Supabase browser/server clients via `@supabase/ssr`; `/auth/callback` route; register `setAuthTokenProvider(() => session.access_token)` | `src/lib/auth`, `app/(auth)`, providers | M1 |
-| `proxy.ts` reads the stage from verified Supabase claims (`app_stage`) instead of `wit_session_hint` | `src/proxy.ts`, `src/lib/auth/*` | M1 |
+| `proxy.ts` reads the stage from verified Supabase claims (`app_stage`) instead of `wid_session_hint` | `src/proxy.ts`, `src/lib/auth/*` | M1 |
 | `signInWithGoogle` becomes redirect-based (its promise never resolves); `listGoogleAccounts` returns `[]` | `ApiAuthService` + login UI pending state | M1 |
 | Per-service API mode (`NEXT_PUBLIC_API_SERVICES`) | `src/services/registry.ts` | M1 |
 | `Api*Service` implementations using `packages/contracts` schemas | `src/services/api/*` | M1 to M8 |
