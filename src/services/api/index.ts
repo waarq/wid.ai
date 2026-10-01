@@ -1,6 +1,11 @@
 import type { ServiceFactories } from "../registry"
 
 import { ApiAuthService } from "./auth-service"
+import { ApiCalendarService } from "./calendar-service"
+import { ApiIntegrationService } from "./integration-service"
+import { ApiOnboardingService } from "./onboarding-service"
+import { ApiSettingsService } from "./settings-service"
+import { ApiUserService } from "./user-service"
 
 /*
  * Api* implementations, added service by service as the backend lands
@@ -10,6 +15,18 @@ import { ApiAuthService } from "./auth-service"
  */
 export const apiServiceFactories: Partial<ServiceFactories> = {
   auth: () => new ApiAuthService(),
+  user: () => new ApiUserService(),
+  onboarding: () => new ApiOnboardingService(),
+  settings: () => new ApiSettingsService(),
+  integrations: () => new ApiIntegrationService(),
+  calendar: () => new ApiCalendarService(),
 }
 
-export { ApiAuthService }
+export {
+  ApiAuthService,
+  ApiCalendarService,
+  ApiIntegrationService,
+  ApiOnboardingService,
+  ApiSettingsService,
+  ApiUserService,
+}

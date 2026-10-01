@@ -6,7 +6,7 @@ import { useShallow } from "zustand/react/shallow"
 
 import { ErrorState } from "@/components/shared/error-state"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useCompleteOnboarding, useOnboardingProgress, useSaveOnboardingStep } from "@/hooks"
+import { useCompleteOnboarding, useOAuthReturn, useOnboardingProgress, useSaveOnboardingStep } from "@/hooks"
 import { useStoreHydration } from "@/store/hydration"
 import {
   getMissingOnboardingFields,
@@ -66,6 +66,7 @@ export function OnboardingFlow() {
   const progress = useOnboardingProgress()
   const saveStep = useSaveOnboardingStep()
   const complete = useCompleteOnboarding()
+  useOAuthReturn()
 
   const { currentStep, completedSteps, skippedSteps, data } = useOnboardingStore(
     useShallow((s) => ({

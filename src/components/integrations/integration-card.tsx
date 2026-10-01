@@ -36,6 +36,8 @@ import { getUserMessage } from "@/lib/utils/errors"
 import { cn } from "@/lib/utils"
 import { CAPTURE_MODES, type CaptureMode, type Integration, type IntegrationProvider } from "@/types"
 
+import { useRedirecting } from "./use-redirecting"
+
 interface ProviderCopy {
   label: string
   description: string
@@ -94,6 +96,7 @@ export function IntegrationCard({ integration }: { integration: Integration }) {
   const Icon = copy.icon
   const connect = useConnectIntegration()
   const disconnect = useDisconnectIntegration()
+  const redirecting = useRedirecting()
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [configureOpen, setConfigureOpen] = useState(false)
   const connected = integration.status === "connected"
@@ -104,7 +107,7 @@ export function IntegrationCard({ integration }: { integration: Integration }) {
     connect.mutate(integration.provider, {
       onSuccess: (result) => {
         if (result.authorizationUrl) {
-          window.location.assign(result.authorizationUrl)
+          redirecting.begin(result.authorizationUrl)
           return
         }
         toast.success(`${copy.label} connected`)
@@ -152,8 +155,8 @@ export function IntegrationCard({ integration }: { integration: Integration }) {
 
       <div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:justify-end">
         {comingSoon ? null : !connected ? (
-          <Button type="button" size="sm" disabled={connect.isPending} onClick={handleConnect}>
-            {connect.isPending ? "Connecting…" : connect.isError ? "Try again" : "Connect"}
+          <Button type="button" size="sm" disabled={connect.isPending || redirecting.active} onClick={handleConnect}>
+            {redirecting.active ? "Redirecting…" : connect.isPending ? "Connecting…" : connect.isError ? "Try again" : "Connect"}
           </Button>
         ) : (
           <>

@@ -7,6 +7,7 @@
  */
 export { useGoogleAccounts, useSession, useSignIn, useSignOut } from "./use-auth"
 export { useProfile, useUpdateProfile, useUploadAvatar, useWorkspaceMembers } from "./use-profile"
+export { useOAuthReturn } from "./use-oauth-return"
 export { useCompleteOnboarding, useOnboardingProgress, useSaveOnboardingStep } from "./use-onboarding"
 export { useCalendar, useCalendarEvents, useConnectCalendar, useDisconnectCalendar } from "./use-calendar"
 export {

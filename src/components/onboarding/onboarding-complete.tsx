@@ -2,11 +2,13 @@
 
 import { motion, useReducedMotion } from "framer-motion"
 import { ArrowRight, Check } from "lucide-react"
-import Link from "next/link"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { POST_ONBOARDING_DELAY_MS, shouldAutoRedirect } from "@/lib/auth/post-onboarding"
 import { APP_HOME_PATH } from "@/lib/auth/routes"
+import { refreshSessionClaims } from "@/lib/supabase/client"
+import { isRealAuth } from "@/services/modes"
 import type { OnboardingData } from "@/types"
 
 import { CAPTURE_PREFERENCE_SHORT, MEETING_FOCUS_SHORT, SHARING_SHORT } from "./options"
@@ -18,13 +20,63 @@ interface OnboardingCompleteProps {
   >
 }
 
+const REDIRECT_ATTEMPT_KEY = "wid-onboarding-redirect-at"
+
+function readLastAttempt(): number | null {
+  try {
+    const raw = window.sessionStorage.getItem(REDIRECT_ATTEMPT_KEY)
+    return raw ? Number(raw) : null
+  } catch {
+    return null
+  }
+}
+
+function markAttempt(): void {
+  try {
+    window.sessionStorage.setItem(REDIRECT_ATTEMPT_KEY, String(Date.now()))
+  } catch {
+    // Storage unavailable: the loop guard simply doesn't apply.
+  }
+}
+
+/**
+ * Hard navigation to the app. The proxy reads the `app_stage` claim, so the
+ * token is refreshed first (best effort) and the document is reloaded so the
+ * rotated sb-* cookies reach it. A soft navigation could hit the proxy with a
+ * stale cookie.
+ */
+async function goToApp(): Promise<void> {
+  if (isRealAuth) await refreshSessionClaims().catch(() => undefined)
+  window.location.assign(APP_HOME_PATH)
+}
+
 /** "You're ready." Subtle check draw + staggered summary; no confetti. */
 export function OnboardingComplete({ data }: OnboardingCompleteProps) {
   const reduceMotion = useReducedMotion()
   const headingRef = useRef<HTMLHeadingElement>(null)
 
+  const [leaving, setLeaving] = useState(false)
+
   useEffect(() => {
     headingRef.current?.focus({ preventScroll: true })
+  }, [])
+
+  function leave(auto: boolean) {
+    if (!auto) markAttempt()
+    setLeaving(true)
+    void goToApp()
+  }
+
+  // Automatic redirect after a short pause; the button stays for impatient
+  // users. Skipped when one just ran (stale claim bounced us back here).
+  useEffect(() => {
+    if (!shouldAutoRedirect(readLastAttempt(), Date.now())) return
+    const timer = window.setTimeout(() => {
+      markAttempt()
+      setLeaving(true)
+      void goToApp()
+    }, POST_ONBOARDING_DELAY_MS)
+    return () => window.clearTimeout(timer)
   }, [])
 
   const focus = data.meetingFocus.map((f) => MEETING_FOCUS_SHORT[f])
@@ -98,11 +150,9 @@ export function OnboardingComplete({ data }: OnboardingCompleteProps) {
 
       <div className="grid gap-3">
         <div>
-          <Button asChild size="lg" className="px-4">
-            <Link href={APP_HOME_PATH} replace>
-              Go to WID
-              <ArrowRight aria-hidden />
-            </Link>
+          <Button type="button" size="lg" className="px-4" disabled={leaving} onClick={() => leave(false)}>
+            {leaving ? "Opening WID…" : "Go to WID"}
+            {leaving ? null : <ArrowRight aria-hidden />}
           </Button>
         </div>
         <p className="text-sm text-muted-foreground">You can change any of this later in Settings.</p>

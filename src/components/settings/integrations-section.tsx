@@ -3,7 +3,7 @@
 import { ErrorState } from "@/components/shared/error-state"
 import { IntegrationCard } from "@/components/integrations/integration-card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useIntegrations } from "@/hooks"
+import { useIntegrations, useOAuthReturn } from "@/hooks"
 import type { Integration } from "@/types"
 
 import { SectionHeading } from "./settings-form"
@@ -24,6 +24,7 @@ function Group({ title, items }: { title: string; items: Integration[] }) {
 
 export function IntegrationsSection() {
   const integrations = useIntegrations()
+  useOAuthReturn()
 
   return (
     <div className="grid gap-6">

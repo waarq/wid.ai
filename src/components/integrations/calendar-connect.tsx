@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCalendar, useConnectCalendar, useDisconnectCalendar } from "@/hooks"
 import { cn } from "@/lib/utils"
+
+import { useRedirecting } from "./use-redirecting"
 import type { CalendarConnection } from "@/types"
 
 import { CalendarPermissionsPanel } from "./calendar-permissions-panel"
@@ -37,6 +39,7 @@ export function CalendarConnect({ context, onStatusChange, className }: Calendar
   const connect = useConnectCalendar()
   const disconnect = useDisconnectCalendar()
   const [showNotice, setShowNotice] = useState(false)
+  const redirecting = useRedirecting()
   const noticeButtonRef = useRef<HTMLButtonElement>(null)
 
   const connection = calendar.data ?? null
@@ -59,7 +62,7 @@ export function CalendarConnect({ context, onStatusChange, className }: Calendar
       onSuccess: (result) => {
         if (result.authorizationUrl) {
           // Redirect-based OAuth: finish consent on the provider's page.
-          window.location.assign(result.authorizationUrl)
+          redirecting.begin(result.authorizationUrl)
           return
         }
         toast.success("Google Calendar connected", {
@@ -138,10 +141,12 @@ export function CalendarConnect({ context, onStatusChange, className }: Calendar
                 {connection.accountEmail ? <> · {connection.accountEmail}</> : null}
               </p>
             </>
-          ) : connect.isPending ? (
+          ) : connect.isPending || redirecting.active ? (
             <>
               <p className="text-sm font-medium text-foreground">Connecting to Google Calendar</p>
-              <p className="text-sm text-muted-foreground">Waiting for Google to confirm access…</p>
+              <p className="text-sm text-muted-foreground">
+                {redirecting.active ? "Redirecting to Google…" : "Waiting for Google to confirm access…"}
+              </p>
             </>
           ) : (
             <>
@@ -204,9 +209,9 @@ export function CalendarConnect({ context, onStatusChange, className }: Calendar
         <>
           <CalendarPermissionsPanel />
           <div>
-            <Button type="button" size="lg" className="px-4" disabled={connect.isPending} onClick={handleConnect}>
-              {connect.isPending ? <Loader2 aria-hidden className="animate-spin" /> : null}
-              {connect.isPending ? "Connecting" : connect.isError ? "Try again" : "Connect Google Calendar"}
+            <Button type="button" size="lg" className="px-4" disabled={connect.isPending || redirecting.active} onClick={handleConnect}>
+              {connect.isPending || redirecting.active ? <Loader2 aria-hidden className="animate-spin" /> : null}
+              {redirecting.active ? "Redirecting…" : connect.isPending ? "Connecting" : connect.isError ? "Try again" : "Connect Google Calendar"}
             </Button>
           </div>
         </>

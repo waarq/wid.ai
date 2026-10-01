@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useConnectZoom, useDisconnectIntegration, useIntegration } from "@/hooks"
 import { cn } from "@/lib/utils"
 
+import { useRedirecting } from "./use-redirecting"
 import type { IntegrationContext } from "./calendar-connect"
 
 interface ZoomConnectProps {
@@ -27,6 +28,7 @@ export function ZoomConnect({ context, onStatusChange, className }: ZoomConnectP
   const zoom = useIntegration("zoom")
   const connect = useConnectZoom()
   const disconnect = useDisconnectIntegration()
+  const redirecting = useRedirecting()
 
   const connected = zoom.data?.status === "connected"
 
@@ -42,7 +44,7 @@ export function ZoomConnect({ context, onStatusChange, className }: ZoomConnectP
     connect.mutate(undefined, {
       onSuccess: (result) => {
         if (result.authorizationUrl) {
-          window.location.assign(result.authorizationUrl)
+          redirecting.begin(result.authorizationUrl)
           return
         }
         toast.success("Zoom connected", { description: "WID can now work with your Zoom meetings." })
@@ -104,10 +106,12 @@ export function ZoomConnect({ context, onStatusChange, className }: ZoomConnectP
                 {zoom.data?.accountLabel ? <> · {zoom.data.accountLabel}</> : null}
               </p>
             </>
-          ) : connect.isPending ? (
+          ) : connect.isPending || redirecting.active ? (
             <>
               <p className="text-sm font-medium text-foreground">Connecting to Zoom</p>
-              <p className="text-sm text-muted-foreground">Waiting for Zoom to confirm access…</p>
+              <p className="text-sm text-muted-foreground">
+                {redirecting.active ? "Redirecting to Zoom…" : "Waiting for Zoom to confirm access…"}
+              </p>
             </>
           ) : (
             <>
@@ -142,9 +146,9 @@ export function ZoomConnect({ context, onStatusChange, className }: ZoomConnectP
 
       {!connected ? (
         <div>
-          <Button type="button" size="lg" className="px-4" disabled={connect.isPending} onClick={handleConnect}>
-            {connect.isPending ? <Loader2 aria-hidden className="animate-spin" /> : null}
-            {connect.isPending ? "Connecting" : connect.isError ? "Try again" : "Connect Zoom"}
+          <Button type="button" size="lg" className="px-4" disabled={connect.isPending || redirecting.active} onClick={handleConnect}>
+            {connect.isPending || redirecting.active ? <Loader2 aria-hidden className="animate-spin" /> : null}
+            {redirecting.active ? "Redirecting…" : connect.isPending ? "Connecting" : connect.isError ? "Try again" : "Connect Zoom"}
           </Button>
         </div>
       ) : context === "settings" ? (
