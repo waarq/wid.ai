@@ -1,5 +1,7 @@
 import type { ReactNode } from "react"
 
+import { CaptureHost } from "@/components/capture"
+
 import { GoToShortcuts } from "./go-to-shortcuts"
 import { MobileNav } from "./mobile-nav"
 import { Sidebar } from "./sidebar"
@@ -35,6 +37,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
       <MobileNav />
       <GoToShortcuts />
+      <CaptureHost />
     </div>
   )
 }

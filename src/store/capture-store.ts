@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import type { CaptureMode, CaptureState, CaptureStatus } from "@/types"
+import { CAPTURE_MODES, CAPTURE_STATUSES, type CaptureMode, type CaptureState, type CaptureStatus } from "@/types"
 
 import {
   INITIAL_CAPTURE_SESSION,
@@ -47,6 +47,36 @@ export interface CaptureStoreState {
   reset: () => void
 }
 
+const optionalNumber = (value: unknown): number | undefined =>
+  typeof value === "number" && Number.isFinite(value) ? value : undefined
+const optionalString = (value: unknown): string | undefined => (typeof value === "string" ? value : undefined)
+
+/** Storage is user-controlled input: anything malformed restarts from idle. */
+export function sanitizeCaptureSession(value: unknown): CaptureSession {
+  if (typeof value !== "object" || value === null) return INITIAL_CAPTURE_SESSION
+  const raw = value as Record<string, unknown>
+  const status = raw.status
+  if (typeof status !== "string" || !(CAPTURE_STATUSES as readonly string[]).includes(status)) return INITIAL_CAPTURE_SESSION
+  const accumulatedMs = optionalNumber(raw.accumulatedMs)
+  if (accumulatedMs === undefined || accumulatedMs < 0) return INITIAL_CAPTURE_SESSION
+  const mode = optionalString(raw.mode)
+  const failedFrom = optionalString(raw.failedFrom)
+  return {
+    status: status as CaptureStatus,
+    accumulatedMs,
+    meetingId: optionalString(raw.meetingId),
+    calendarEventId: optionalString(raw.calendarEventId),
+    title: optionalString(raw.title),
+    mode: mode && (CAPTURE_MODES as readonly string[]).includes(mode) ? (mode as CaptureMode) : undefined,
+    startedAt: optionalNumber(raw.startedAt),
+    segmentStartedAt: optionalNumber(raw.segmentStartedAt),
+    stoppedAt: optionalNumber(raw.stoppedAt),
+    error: optionalString(raw.error),
+    failedFrom:
+      failedFrom && (CAPTURE_STATUSES as readonly string[]).includes(failedFrom) ? (failedFrom as CaptureStatus) : undefined,
+  }
+}
+
 function apply(
   set: (partial: Partial<CaptureStoreState>) => void,
   get: () => CaptureStoreState,
@@ -78,6 +108,10 @@ export const useCaptureStore = create<CaptureStoreState>()(
       partialize: (state) => ({ session: state.session }),
       // Anything unrecognised starts clean rather than in a half-valid state.
       migrate: () => ({ session: INITIAL_CAPTURE_SESSION }),
+      merge: (persisted, current) => ({
+        ...current,
+        session: sanitizeCaptureSession((persisted as { session?: unknown } | undefined)?.session),
+      }),
       skipHydration: true,
     },
   ),

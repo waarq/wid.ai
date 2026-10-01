@@ -1,17 +1,15 @@
 import type { Metadata } from "next"
 
-import { EmptyState } from "@/components/shared/empty-state"
 import { PageHeader } from "@/components/shared/page-header"
-import { CircleUser } from "lucide-react"
+import { ProfileView } from "@/components/profile/profile-view"
 
 export const metadata: Metadata = { title: "Profile" }
 
-/** PHASE 3 PLACEHOLDER: replaced by the real Profile screen. Exists so navigation never 404s. */
-export default function Page() {
+export default function ProfilePage() {
   return (
     <div className="space-y-6">
-      <PageHeader title="Profile" />
-      <EmptyState icon={CircleUser} title="Profile is coming soon." description="This section is being built." />
+      <PageHeader title="Profile" description="How you appear in WIT, and the timezone your meetings use." />
+      <ProfileView />
     </div>
   )
 }

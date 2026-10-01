@@ -24,6 +24,8 @@ export function useStoreHydration(store: PersistApi): boolean {
 
   useEffect(() => {
     const unsubscribe = store.persist.onFinishHydration(() => setHydrated(true))
+    // Gate on this when defaults must not flash; AppProviders also rehydrates
+    // every persisted store on mount (see store/persisted.ts).
     if (store.persist.hasHydrated()) {
       // Already hydrated by another component: sync on the next microtask
       // rather than calling setState synchronously inside the effect.

@@ -36,6 +36,8 @@ export function useSignIn() {
   return useMutation({
     mutationFn: (input?: GoogleSignInInput): Promise<AuthResult> => services.auth.signInWithGoogle(input),
     onSuccess: (result) => {
+      // Another account may have been signed in on this tab: drop its data.
+      queryClient.removeQueries({ predicate: (query) => query.queryKey[0] !== queryKeys.auth.all[0] })
       queryClient.setQueryData(queryKeys.auth.session(), result.session)
       queryClient.setQueryData(queryKeys.user.profile(), result.session.user)
       if (result.isNewUser) useOnboardingStore.getState().reset()

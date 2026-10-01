@@ -1,4 +1,4 @@
-import type { QueryClient, QueryKey } from "@tanstack/react-query"
+import { hashKey, type QueryClient, type QueryKey } from "@tanstack/react-query"
 
 import type { ListResponse } from "@/types"
 
@@ -41,11 +41,19 @@ export function updateListItems<T>(
   return restore(queryClient, snapshot)
 }
 
-/** Prepends an item to every cached first page under `prefix`. */
-export function prependListItem<T>(queryClient: QueryClient, prefix: QueryKey, item: T): Rollback {
+/**
+ * Prepends an item to every cached first page under `prefix`. Pass `accepts`
+ * to skip lists whose filters the item does not match.
+ */
+export function prependListItem<T>(
+  queryClient: QueryClient,
+  prefix: QueryKey,
+  item: T,
+  accepts: (key: QueryKey) => boolean = () => true,
+): Rollback {
   const snapshot = queryClient.getQueriesData<ListResponse<T>>({ queryKey: prefix })
   for (const [key, data] of snapshot) {
-    if (!data || !Array.isArray(data.items)) continue
+    if (!data || !Array.isArray(data.items) || !accepts(key)) continue
     queryClient.setQueryData<ListResponse<T>>(key, { ...data, items: [item, ...data.items], total: data.total + 1 })
   }
   return restore(queryClient, snapshot)
@@ -62,6 +70,16 @@ export function combineRollbacks(rollbacks: Rollback[]): Rollback {
   return () => {
     for (const rollback of [...rollbacks].reverse()) rollback()
   }
+}
+
+/**
+ * True when `key` starts with `prefix`. Elements compare by value (params
+ * objects included, key order ignored) but exactly: `{}` does not match
+ * `{ status: "ready" }`, unlike the partial matching of `queryKey` filters.
+ */
+export function isKeyPrefix(prefix: QueryKey, key: QueryKey): boolean {
+  if (prefix.length > key.length) return false
+  return prefix.every((part, index) => part === key[index] || hashKey([part]) === hashKey([key[index]]))
 }
 
 /** Mutation context carrying the rollback for onError. */

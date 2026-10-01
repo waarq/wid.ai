@@ -1,10 +1,11 @@
 /*
  * Zustand stores: UI/client state only. Server data lives in TanStack Query.
- * Persisted stores use `skipHydration`; call `useStoreHydration(store)` in
- * the component that first needs persisted values.
+ * Persisted stores use `skipHydration` and are rehydrated by AppProviders on
+ * mount; gate on `useStoreHydration(store)` where defaults must not flash.
  */
 export { useUIStore } from "./ui-store"
 export { useStoreHydration } from "./hydration"
+export { rehydratePersistedStores } from "./persisted"
 export {
   getCaptureStateSnapshot,
   selectCaptureError,
@@ -14,6 +15,7 @@ export {
   selectCaptureTitle,
   selectIsCaptureActive,
   selectIsRecording,
+  sanitizeCaptureSession,
   useCaptureStore,
   type CaptureStoreState,
 } from "./capture-store"

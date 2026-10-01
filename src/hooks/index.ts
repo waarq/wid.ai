@@ -12,6 +12,10 @@ export { useCalendar, useCalendarEvents, useConnectCalendar, useDisconnectCalend
 export {
   PROCESSING_POLL_MS,
   invalidateMeetingDependents,
+  invalidateProcessedMeeting,
+  meetingQueryOptions,
+  meetingsQueryOptions,
+  processingStatusQueryOptions,
   useCreateMeeting,
   useDecisionHistory,
   useDecisions,
@@ -28,7 +32,7 @@ export {
   useUnshareMeeting,
   useUpdateMeeting,
 } from "./use-meetings"
-export { useTranscript, useTranscriptSearch } from "./use-transcript"
+export { transcriptQueryOptions, useTranscript, useTranscriptSearch } from "./use-transcript"
 export { useActionItem, useActionItems, useDeleteAction, useToggleAction, useUpdateAction } from "./use-action-items"
 export {
   SEARCH_GROUP_ORDER,

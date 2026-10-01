@@ -18,9 +18,14 @@ export function useAssistant(meetingId: string) {
   return useMutation({
     mutationFn: (question: string): Promise<MeetingAnswer> => services.assistant.ask(meetingId, question),
     onSuccess: (answer) => {
-      queryClient.setQueryData<MeetingAnswer[]>(queryKeys.assistant.history(meetingId), (history) =>
+      const key = queryKeys.assistant.history(meetingId)
+      const loaded = queryClient.getQueryData<MeetingAnswer[]>(key) !== undefined
+      queryClient.setQueryData<MeetingAnswer[]>(key, (history) =>
         history ? [...history.filter((a) => a.id !== answer.id), answer] : [answer],
       )
+      // History was not loaded yet: the seed above holds only this answer, so
+      // fetch the real thread instead of hiding earlier answers until stale.
+      if (!loaded) void queryClient.invalidateQueries({ queryKey: key })
     },
   })
 }

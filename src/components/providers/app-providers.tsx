@@ -7,15 +7,16 @@ import { ThemeProvider } from "next-themes"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { makeQueryClient } from "@/lib/query/client"
-import { useUIStore } from "@/store/ui-store"
+import { rehydratePersistedStores } from "@/store/persisted"
 
 export function AppProviders({ children }: { children: ReactNode }) {
   // Lazy init keeps one client per browser session and one per server request.
   const [queryClient] = useState(makeQueryClient)
 
-  // The UI store skips automatic hydration so SSR markup matches.
+  // Persisted stores skip automatic hydration so SSR markup matches; they
+  // load stored values here, after hydration (policy in store/persisted.ts).
   useEffect(() => {
-    void useUIStore.persist.rehydrate()
+    rehydratePersistedStores()
   }, [])
 
   return (

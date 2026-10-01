@@ -1,18 +1,26 @@
 "use client"
 
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query"
 
 import { queryKeys } from "@/lib/query"
 import { services } from "@/services"
 import type { Transcript, TranscriptSearchMatch } from "@/types"
 
+/** Transcript query options (exported for prefetching and tests). */
+export function transcriptQueryOptions(meetingId: string) {
+  return queryOptions<Transcript>({
+    queryKey: queryKeys.transcripts.detail(meetingId),
+    queryFn: () => services.transcripts.getByMeetingId(meetingId),
+    // Immutable once ready. A pending/failed transcript is always stale, so it
+    // refetches on the next mount after processing finishes.
+    staleTime: (query) => (query.state.data?.status === "ready" ? 10 * 60_000 : 0),
+  })
+}
+
 export function useTranscript(meetingId: string | undefined, options: { enabled?: boolean } = {}) {
-  return useQuery<Transcript>({
-    queryKey: queryKeys.transcripts.detail(meetingId ?? ""),
-    queryFn: () => services.transcripts.getByMeetingId(meetingId!),
+  return useQuery({
+    ...transcriptQueryOptions(meetingId ?? ""),
     enabled: Boolean(meetingId) && (options.enabled ?? true),
-    // Transcripts are immutable once ready.
-    staleTime: 10 * 60_000,
   })
 }
 

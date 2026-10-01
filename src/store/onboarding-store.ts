@@ -34,12 +34,17 @@ const STORAGE_KEY = "wit-onboarding-draft"
 
 export type OnboardingDraft = Partial<OnboardingData>
 
-export const ONBOARDING_DRAFT_DEFAULTS: OnboardingDraft = {
-  ...ONBOARDING_DEFAULTS,
-  selectedMeetingCategories: [...ONBOARDING_DEFAULTS.selectedMeetingCategories],
-  meetingFocus: [...ONBOARDING_DEFAULTS.meetingFocus],
-  goals: [...ONBOARDING_DEFAULTS.goals],
+/** A fresh copy of the defaults (new arrays every call, so drafts never share them). */
+function draftDefaults(): OnboardingDraft {
+  return {
+    ...ONBOARDING_DEFAULTS,
+    selectedMeetingCategories: [...ONBOARDING_DEFAULTS.selectedMeetingCategories],
+    meetingFocus: [...ONBOARDING_DEFAULTS.meetingFocus],
+    goals: [...ONBOARDING_DEFAULTS.goals],
+  }
 }
+
+export const ONBOARDING_DRAFT_DEFAULTS: Readonly<OnboardingDraft> = Object.freeze(draftDefaults())
 
 /* ---------- pure step helpers ---------- */
 
@@ -83,7 +88,7 @@ export function getMissingOnboardingFields(draft: OnboardingDraft): (keyof Onboa
 /** Builds the full payload, or null while required answers are missing. */
 export function toOnboardingData(draft: OnboardingDraft): OnboardingData | null {
   if (getMissingOnboardingFields(draft).length > 0) return null
-  const merged = { ...ONBOARDING_DRAFT_DEFAULTS, ...draft }
+  const merged = { ...draftDefaults(), ...draft }
   return {
     emailType: merged.emailType!,
     calendarConnected: merged.calendarConnected ?? false,
@@ -116,9 +121,9 @@ function listOf<T extends string>(allowed: readonly T[], value: unknown): T[] | 
  * dropped field by field instead of crashing the onboarding flow.
  */
 export function sanitizeDraft(value: unknown): OnboardingDraft {
-  if (typeof value !== "object" || value === null) return { ...ONBOARDING_DRAFT_DEFAULTS }
+  if (typeof value !== "object" || value === null) return draftDefaults()
   const raw = value as Record<string, unknown>
-  const draft: OnboardingDraft = { ...ONBOARDING_DRAFT_DEFAULTS }
+  const draft: OnboardingDraft = draftDefaults()
 
   const emailType = oneOf(EMAIL_TYPES, raw.emailType)
   if (emailType) draft.emailType = emailType
@@ -169,7 +174,7 @@ const initialState: PersistedOnboarding = {
   currentStep: ONBOARDING_STEPS[0],
   completedSteps: [],
   skippedSteps: [],
-  data: { ...ONBOARDING_DRAFT_DEFAULTS },
+  data: draftDefaults(),
   updatedAt: null,
 }
 
@@ -221,7 +226,7 @@ export const useOnboardingStore = create<OnboardingStoreState>()(
           }
         }),
 
-      reset: () => set({ ...initialState, data: { ...ONBOARDING_DRAFT_DEFAULTS } }),
+      reset: () => set({ ...initialState, data: draftDefaults() }),
     }),
     {
       name: STORAGE_KEY,
@@ -241,7 +246,7 @@ export const useOnboardingStore = create<OnboardingStoreState>()(
         }
       },
       // Older or unknown versions start fresh rather than resuming a stale shape.
-      migrate: () => ({ ...initialState, data: { ...ONBOARDING_DRAFT_DEFAULTS } }),
+      migrate: () => ({ ...initialState, data: draftDefaults() }),
       // Validate on the way in: storage is user-controlled input.
       merge: (persisted, current) => {
         const raw = (persisted ?? {}) as Partial<PersistedOnboarding>

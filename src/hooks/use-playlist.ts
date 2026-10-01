@@ -1,6 +1,6 @@
 "use client"
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient, type QueryKey } from "@tanstack/react-query"
 
 import { queryKeys } from "@/lib/query"
 import { services } from "@/services"
@@ -52,7 +52,12 @@ export function useAddToPlaylist() {
           : { id: input.meetingId, title: "", startedAt: new Date().toISOString() },
         createdAt: new Date().toISOString(),
       }
-      return { rollback: prependListItem(queryClient, queryKeys.playlist.lists(), placeholder) }
+      // Only lists whose filters the new item matches (kind / meetingId).
+      const accepts = (key: QueryKey) => {
+        const params = key[queryKeys.playlist.lists().length] as PlaylistListParams | undefined
+        return (!params?.kind || params.kind === input.kind) && (!params?.meetingId || params.meetingId === input.meetingId)
+      }
+      return { rollback: prependListItem(queryClient, queryKeys.playlist.lists(), placeholder, accepts) }
     },
     onError: (_error, _input, context) => context?.rollback(),
     onSettled: () => void queryClient.invalidateQueries({ queryKey: queryKeys.playlist.all }),

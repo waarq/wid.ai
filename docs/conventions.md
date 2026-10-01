@@ -111,9 +111,26 @@ Every AI-generated insight extends `Traceable { meetingId, sourceSegmentId, sour
 | `src/services/mock/generators.ts` | Transcript + traceable summary for captured meetings (internal or customer template, scaled to the captured length). |
 | `src/services/mock/assistant-engine.ts`, `search-engine.ts` | Deterministic intent/keyword scoring for "Ask this meeting" and ranked global search. |
 | `src/hooks/` | One file per domain plus the `index.ts` barrel. Optimistic updates with rollback for action toggles, alert read state, playlist and settings. |
-| `src/store/` | `capture-machine.ts` (pure machine), `capture-store.ts`, `onboarding-store.ts`, `preferences-store.ts`, `storage.ts`, `hydration.ts`. Persisted stores use `skipHydration`. Call `useStoreHydration(store)` before reading persisted values. |
+| `src/store/` | `capture-machine.ts` (pure machine), `capture-store.ts`, `onboarding-store.ts`, `preferences-store.ts`, `storage.ts`, `hydration.ts`, `persisted.ts`. See "Persisted stores" below. |
 | `src/lib/auth/` | Routing hint cookie (`wit_session_hint`, value `v1.<stage>`, no secrets), route rules (`resolveRouteAccess`), client cookie writers and a server reader (`server-session.ts`, import it directly). |
 | `src/proxy.ts` | Three-state route guard. This is mock gating only, and the backend authorizes every request. |
+| `vitest.config.mts`, `**/*.test.ts` | Unit and service tests (Vitest 4, Node environment, `@` alias, `NODE_ENV=test`). `npm test` watches, `npm run test:run` runs once. |
+
+### Persisted stores (hydration policy)
+
+- `useUIStore`, `usePreferencesStore`, `useOnboardingStore` and `useCaptureStore` all set `skipHydration: true`, so the server render and the first client render use defaults and never mismatch.
+- `AppProviders` calls `rehydratePersistedStores()` (`store/persisted.ts`) in a mount effect, which hydrates every persisted store once, right after hydration, on every page. Components may read persisted values directly and re-render once with the stored value.
+- Where defaults must not flash (onboarding step, capture timer, list/grid toggle), gate on `useStoreHydration(store)`. It reports readiness, and it rehydrates if it runs first (child effects run before the provider's). A store that already hydrated is never rehydrated again, so newer in-memory state is never replaced by storage.
+- Storage is user input. Each store validates on the way in (`sanitizeDraft`, preferences `sanitize`, `sanitizeCaptureSession`).
+- A new persisted store must use `skipHydration: true` and be added to `PERSISTED_STORES`.
+
+### Query cache rules learned in Phase 2
+
+- Never invalidate the query whose `queryFn` is running. Invalidation cancels the in-flight fetch and starts it again, so the new data never lands. Use `invalidateProcessedMeeting(client, meetingId, except)`, which skips `except` and its sub-keys.
+- When a meeting finishes processing, the detail, list or processing query that sees the change (`finishedProcessing`) refreshes the transcript, actions, alerts, search, playlist, suggestions and lists once.
+- Pending or failed transcripts are always stale. Only ready transcripts are cached for 10 minutes.
+- `useFollowUp` regenerates with the last chosen tone when the meeting changes. Pass `{ enabled: false }` until the meeting is ready.
+- `meetingsQueryOptions`, `meetingQueryOptions`, `processingStatusQueryOptions` and `transcriptQueryOptions` are exported for prefetching and for React-free tests (`src/hooks/use-meetings.test.ts`).
 
 ### Behaviour notes
 
@@ -127,12 +144,25 @@ Every AI-generated insight extends `Traceable { meetingId, sourceSegmentId, sour
 URL flags: `?mockFail=meetings.list[:code][,alerts.*]`, `?mockFail=*`, `?mockLatency=0|slow|800|300-900`, `?mockProcessing=fail`.
 Console: `window.__WIT_MOCK__.fail(op, code, { times })`, `.clearFailures()`, `.setLatency(min, max)`, `.failNextProcessing()`, `.failActiveCapture()`, `.setProcessingPhaseMs(ms)`, `await .reset()`. Operation names are `<registryKey>.<method>`, for example `actionItems.toggleComplete`.
 
-### Continue from here (status at the end of Phase 1)
+### Continue from here (status after the Phase 1 close-out)
 
-- Done: every mock service, the registry wiring, all hooks, the stores, proxy and auth helpers, and the StatusBadge type swap. `tsc`, `eslint` and the end-to-end script (70 checks) pass.
+- Done: every mock service, the registry wiring, all hooks, the stores, proxy and auth helpers, and the StatusBadge type swap.
+- Done in the close-out:
+  - Vitest with 129 tests in 11 files. Covered: the capture machine, route rules, onboarding sanitising, the assistant and search engines, the meeting, sharing, action, playlist, alert, capture and settings services (access rules, traceability, manual capture, privacy defaults, link-sharing gating), store rehydration, and the meeting-hook cache behaviour. Fixture integrity (`assertMockIntegrity`) runs as a test.
+  - Fixtures: "Confirm launch checklist" (Ayesha, open) was added to Product Planning (Sep 25) at 18:40. Searching "launch" now returns it. Product Planning (Oct 1) keeps the PRD's 3 decisions, 4 actions and 1 open question.
+  - Central rehydration of persisted stores (see "Persisted stores").
+  - Hook fixes:
+    - The processing-status refetch loop that kept a finished meeting stuck in "processing" is fixed.
+    - The detail and list queries now refresh dependents when processing finishes.
+    - Pending transcripts are no longer cached for 10 minutes.
+    - The follow-up keeps its tone when it regenerates.
+    - The assistant no longer hides earlier history when the thread was not loaded.
+    - Optimistic playlist adds only go into lists whose filters match.
+    - Deleting a meeting no longer causes a not-found flash.
+    - Sign-in drops the previous account's cached data.
+    - The onboarding defaults no longer share array references.
 - Not done or open:
-  1. No unit tests in the repo, because there is no test framework. The pure functions are ready for tests: `transition`, `getElapsedMs`, `resolveRouteAccess`, `getSafeNextPath`, `sanitizeDraft`, `answerQuestion` and `runSearch`.
-  2. The mock data has no "Confirm launch checklist" action. Searching "launch" returns "Send the final launch date to leadership". The captured-meeting template does contain "Confirm launch checklist".
-  3. Nothing has exercised the hooks in a running UI yet, because Phase 2+ screens don't exist.
-  4. `AppProviders` only rehydrates `useUIStore`. The other stores rehydrate through `useStoreHydration` in the screens that use them.
-- To re-run the service checks, run a Node script that imports `src/services/index.ts` through `jiti` with the `@` alias pointed at `src`, under `NODE_ENV=test`. The Phase 1 script lived in the agent scratchpad and was not committed.
+  1. No `Api*` service exists yet (`services/api/` is empty, and the api slot in the registry throws `service_unavailable`). It needs the backend contract.
+  2. There is no tag-listing service or hook. Tags come from the meetings in the cache. Add `TagService` or `useTags` if a screen needs every tag.
+  3. Hook tests run without React through the option factories. Component or hook rendering tests would need `jsdom` and `@testing-library/react`, which are not installed.
+- Running checks: `npm run test:run`, `npx tsc --noEmit`, `npm run lint`.

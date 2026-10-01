@@ -36,6 +36,7 @@ export const productPlanningSep25: MeetingSpec = {
     ["hamza", "14:10", "Yes, I'll write it up with a worst case and a best case."],
     ["waleed", "16:20", "I'll own the fix for long recordings and have it merged by Wednesday."],
     ["ahmed", "18:05", "Great. Anything else? If not, let's wrap early."],
+    ["ayesha", "18:40", "One more. Whatever the date ends up being, I'll confirm the launch checklist and check each item with its owner before we go live."],
     ["sara", "19:40", "Nothing from me. Thanks, everyone."],
   ],
   insights: {
@@ -77,6 +78,14 @@ export const productPlanningSep25: MeetingSpec = {
         who: "sara",
         due: 2,
         status: "in_progress",
+      },
+      {
+        at: "18:40",
+        title: "Confirm launch checklist",
+        description: "Pull every readiness item into one checklist and confirm each item with its owner.",
+        who: "ayesha",
+        due: 9,
+        status: "open",
       },
     ],
     questions: [
