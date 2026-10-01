@@ -1,5 +1,7 @@
+import { TriangleAlert } from "lucide-react"
 import Link from "next/link"
 
+import { AUTH_CALLBACK_ERROR_MESSAGES, type AuthCallbackError } from "@/lib/auth/callback"
 import type { GoogleSignInInput } from "@/types"
 
 import { GoogleSignIn } from "./google-sign-in"
@@ -7,6 +9,8 @@ import { GoogleSignIn } from "./google-sign-in"
 interface AuthCardProps {
   intent: GoogleSignInInput["intent"]
   next?: string | null
+  /** Closed-set flag from a failed /auth/callback (`?error=`), already parsed. */
+  error?: AuthCallbackError | null
 }
 
 const COPY = {
@@ -33,7 +37,7 @@ const COPY = {
 } as const
 
 /** Server-rendered sign-in / sign-up body. Only the Google button is a client leaf. */
-export function AuthCard({ intent, next }: AuthCardProps) {
+export function AuthCard({ intent, next, error }: AuthCardProps) {
   const copy = COPY[intent]
   const switchHref = next ? `${copy.switchHref}?${new URLSearchParams({ next }).toString()}` : copy.switchHref
 
@@ -47,6 +51,15 @@ export function AuthCard({ intent, next }: AuthCardProps) {
       </div>
 
       <div className="grid gap-6">
+        {error ? (
+          <p
+            role="alert"
+            className="grid grid-cols-[auto_1fr] items-start gap-2 rounded-md bg-destructive-soft px-3 py-2.5 text-sm text-foreground"
+          >
+            <TriangleAlert aria-hidden className="mt-0.5 size-4 text-destructive" />
+            <span>{AUTH_CALLBACK_ERROR_MESSAGES[error]}</span>
+          </p>
+        ) : null}
         <GoogleSignIn intent={intent} next={next} />
         <div className="border-t border-border" />
         <p className="text-sm text-muted-foreground">

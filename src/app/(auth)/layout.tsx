@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 import { CalendarDays, Hand, Lock } from "lucide-react"
 
 import { Logo } from "@/components/shared/logo"
+import { isRealAuth } from "@/services/modes"
 
 const PROMISES = [
   {
@@ -30,7 +31,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         </header>
         <main className="grid content-center py-16 sm:py-20">{children}</main>
         <footer className="text-xs text-muted-foreground">
-          Demo environment. Accounts and meetings are fictional.
+          {isRealAuth
+            ? "Sign-in uses your Google account. WID only asks for your name and email."
+            : "Demo environment. Accounts and meetings are fictional."}
         </footer>
       </div>
 

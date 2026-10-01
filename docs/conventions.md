@@ -66,7 +66,7 @@ Data flows **UI → hook → `services.x` → Mock* or Api***. Components never 
 4. Implement `Mock<Name>Service` in `services/mock/` and `Api<Name>Service` in `services/api/`. Register their factories in the `serviceFactories` slots.
 5. Add keys to `lib/query/keys.ts`, then write hooks in `hooks/` that call `services.<name>`.
 6. Errors: implementations reject **only** with `AppException` (`lib/utils/errors.ts`). `apiClient` already guarantees this. Mocks construct one explicitly. Never surface a backend message. UI copy comes from the screen plus `error.message`, which is always user-safe.
-7. Switch implementations with `NEXT_PUBLIC_USE_MOCKS` (`false` means API).
+7. Switch implementations with `NEXT_PUBLIC_USE_MOCKS` (`false` means API), or per service with `NEXT_PUBLIC_API_SERVICES` (see section 11).
 
 ## 6. Traceability rule
 
@@ -97,7 +97,7 @@ Every AI-generated insight extends `Traceable { meetingId, sourceSegmentId, sour
 
 ## 9. Security
 
-- No secrets in code or `NEXT_PUBLIC_*`. No credentials in `localStorage`. Sessions use backend httpOnly cookies, and the fetch adapter sends `credentials: "include"`. For header auth, register a token source with `setAuthTokenProvider`, which keeps the token in memory or the auth SDK.
+- No secrets in code or `NEXT_PUBLIC_*`. No credentials in `localStorage`. Real auth keeps the Supabase session in `@supabase/ssr` cookies and sends `Authorization: Bearer` through `setAuthTokenProvider` (section 11). The Supabase anon key is public by design; the service-role key never appears in this repo.
 - Client state and proxy redirects are only UX. Treat backend authorization as authoritative.
 
 ## 10. Phase 1: data layer (mock services, hooks, stores, routing)
@@ -113,7 +113,7 @@ Every AI-generated insight extends `Traceable { meetingId, sourceSegmentId, sour
 | `src/hooks/` | One file per domain plus the `index.ts` barrel. Optimistic updates with rollback for action toggles, alert read state, playlist and settings. |
 | `src/store/` | `capture-machine.ts` (pure machine), `capture-store.ts`, `onboarding-store.ts`, `preferences-store.ts`, `storage.ts`, `hydration.ts`, `persisted.ts`. See "Persisted stores" below. |
 | `src/lib/auth/` | Routing hint cookie (`wid_session_hint`, value `v1.<stage>`, no secrets), route rules (`resolveRouteAccess`), client cookie writers and a server reader (`server-session.ts`, import it directly). |
-| `src/proxy.ts` | Three-state route guard. This is mock gating only, and the backend authorizes every request. |
+| `src/proxy.ts` | Three-state route guard. Mock auth reads the hint cookie, real auth reads verified Supabase claims (section 11). UX only; the backend authorizes every request. |
 | `vitest.config.mts`, `**/*.test.ts` | Unit and service tests (Vitest 4, Node environment, `@` alias, `NODE_ENV=test`). `npm test` watches, `npm run test:run` runs once. |
 
 ### Persisted stores (hydration policy)
@@ -162,7 +162,29 @@ Console: `window.__WID_MOCK__.fail(op, code, { times })`, `.clearFailures()`, `.
     - Sign-in drops the previous account's cached data.
     - The onboarding defaults no longer share array references.
 - Not done or open:
-  1. No `Api*` service exists yet (`services/api/` is empty, and the api slot in the registry throws `service_unavailable`). It needs the backend contract.
+  1. Only `ApiAuthService` exists (section 11). Other services in api mode throw `service_unavailable` until their Api* lands.
   2. There is no tag-listing service or hook. Tags come from the meetings in the cache. Add `TagService` or `useTags` if a screen needs every tag.
   3. Hook tests run without React through the option factories. Component or hook rendering tests would need `jsdom` and `@testing-library/react`, which are not installed.
 - Running checks: `npm run test:run`, `npx tsc --noEmit`, `npm run lint`.
+
+## 11. Real auth (Supabase, backend Phase 1)
+
+Turn it on with `NEXT_PUBLIC_API_SERVICES=auth` (or `NEXT_PUBLIC_USE_MOCKS=false`) plus `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. With neither switch set, everything below is inert and the mock flow (account chooser, `wid_session_hint`) is unchanged.
+
+| Path | What |
+| --- | --- |
+| `src/services/modes.ts` | Pure per-service mode resolution (`serviceModes`, `isRealAuth`). `NEXT_PUBLIC_API_SERVICES` is a comma list or `*`. Mixed mode is ignored when `NEXT_PUBLIC_APP_ENV=production`. Safe to import from the proxy. |
+| `src/services/api/` | `ApiAuthService` and `apiServiceFactories`. A service in api mode without an Api* entry throws `service_unavailable` (never falls back to its mock). |
+| `src/lib/supabase/` | `config.ts` (public env), `client.ts` (browser singleton, `getSupabaseAccessToken`, `refreshSessionClaims`), `server.ts` (`createSupabaseServerClient`, async `cookies()`), `proxy.ts` (`updateSupabaseSession`, `withSupabaseCookies`), `token-bridge.ts` (`setAuthTokenProvider` wiring). |
+| `src/lib/auth/claims.ts` | `stageFromClaims()`: verified `app_stage` claim to `AuthStage`. Signed in without the claim reads as `onboarding`. |
+| `src/lib/auth/callback.ts`, `bootstrap.ts` | Callback URL, success/error targets, the closed set of `?error=` flags with user-safe copy, and `POST /v1/auth/bootstrap`. |
+| `src/app/auth/callback/route.ts` | Exchanges the PKCE code, bootstraps, redirects by stage (safe `next` honoured). On failure it signs out locally and redirects to `/login?error=<flag>` (or `/register`). |
+
+Rules:
+
+- `signInWithGoogle()` never resolves in real mode (the page leaves for Google). The login button shows "Redirecting to Google…" while pending. `listGoogleAccounts()` returns `[]`, so the mock chooser is not used.
+- The proxy derives the stage from `supabase.auth.getClaims()` and still decides with `resolveRouteAccess()`. It refreshes session cookies on every matched request, and any redirect must carry them (`withSupabaseCookies`). `wid_session_hint` is ignored and never written in real mode.
+- `apiClient` asks the token bridge for a token on every request; `auth.getSession()` refreshes an expiring token first. Do not cache tokens elsewhere.
+- `redirectTo` uses the current origin (the PKCE verifier cookie lives there). Allow-list `<origin>/auth/callback**` in Supabase Auth URL configuration for every origin you use.
+- **Phase 2:** `ApiOnboardingService.complete()` must call `refreshSessionClaims()` from `@/lib/supabase/client` right after `POST /v1/onboarding/complete` succeeds and before routing to `/my-calls`, so the new `app_stage: "ready"` claim reaches the proxy.
+- The Supabase Custom Access Token Hook that writes `app_stage` is required (docs/backend/03-security-rls.md 2.4). Without it every signed-in user routes as `onboarding`.

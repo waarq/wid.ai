@@ -1,6 +1,7 @@
 /*
  * Isomorphic + browser auth helpers. Server-only reader lives in
- * "@/lib/auth/server-session" and is deliberately not re-exported here.
+ * "@/lib/auth/server-session" and is deliberately not re-exported here, as
+ * is "@/lib/auth/bootstrap" (used only by the /auth/callback route handler).
  *
  * Everything in this folder is routing/UX only. The backend is the authority
  * for authentication and authorization.
@@ -31,3 +32,19 @@ export {
   type RouteDecision,
   type RouteKind,
 } from "./routes"
+export { APP_STAGE_CLAIM, stageFromClaims, type StageClaims } from "./claims"
+export {
+  AUTH_CALLBACK_ERRORS,
+  AUTH_CALLBACK_ERROR_MESSAGES,
+  AUTH_CALLBACK_PATH,
+  AUTH_ERROR_PARAM,
+  INTENT_PARAM,
+  buildAuthCallbackUrl,
+  callbackErrorFromProvider,
+  getCallbackErrorPath,
+  getCallbackSuccessPath,
+  parseAuthCallbackError,
+  parseIntent,
+  resolveApiBaseUrl,
+  type AuthCallbackError,
+} from "./callback"

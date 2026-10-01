@@ -1,6 +1,8 @@
 import { AppException } from "@/lib/utils/errors"
 
+import { apiServiceFactories } from "./api"
 import { mockServiceFactories } from "./mock"
+import { SERVICE_NAMES, serviceModes, type ServiceMode, type ServiceModes, type ServiceName } from "./modes"
 
 import type {
   ActionItemService,
@@ -42,41 +44,61 @@ export interface ServiceRegistry {
   settings: SettingsService
 }
 
-export type ServiceName = keyof ServiceRegistry
-export type ServiceMode = "mock" | "api"
+export type { ServiceMode, ServiceModes, ServiceName } from "./modes"
+
+// SERVICE_NAMES (modes.ts) must list exactly the registry keys.
+type Exact<A, B> = [A] extends [B] ? ([B] extends [A] ? true : never) : never
+const registryKeysMatch: Exact<ServiceName, keyof ServiceRegistry> = true
+void registryKeysMatch
 
 /** Lazy constructors: a service is only instantiated the first time it is used. */
 export type ServiceFactories = { [K in ServiceName]: () => ServiceRegistry[K] }
 
 /**
- * SWITCH: NEXT_PUBLIC_USE_MOCKS=false uses the Api* services; anything else
- * (including unset) uses the Mock* services. Read literally so Next.js inlines it.
+ * SWITCH (see services/modes.ts):
+ *   NEXT_PUBLIC_USE_MOCKS=false   every service defaults to Api*; anything else
+ *                                 (including unset) defaults to Mock*.
+ *   NEXT_PUBLIC_API_SERVICES      comma list ("auth,user") or "*" selecting Api*
+ *                                 per service while the rest keep the default.
+ *                                 Mixing is ignored when NEXT_PUBLIC_APP_ENV=production.
  *
+ * `serviceMode` is the default mode; `serviceModes` is the per-service result.
  * Mock fixtures are loaded with a dynamic import on first use, so API mode
  * never downloads them.
  */
 export const serviceMode: ServiceMode = process.env.NEXT_PUBLIC_USE_MOCKS === "false" ? "api" : "mock"
+export { serviceModes }
 
 /**
- * Implementation slots, filled per mode. Each phase adds its factories here:
- *
- *   import { mockServiceFactories } from "./mock"
- *   import { apiServiceFactories } from "./api"
- *   const serviceFactories = { mock: mockServiceFactories, api: apiServiceFactories }
- *
- * `Partial` lets services land incrementally; once a mode is complete its slot
- * can be typed as the full `ServiceFactories`. Resolving a service that has no
- * factory in the active mode throws a `service_unavailable` AppError rather
- * than silently falling back to the other mode.
+ * Implementation slots. `Partial` lets Api* services land incrementally
+ * (services/api/index.ts). Resolving a service that has no factory in its
+ * selected mode throws a `service_unavailable` AppError rather than silently
+ * falling back to the other mode.
  */
 const serviceFactories: Record<ServiceMode, Partial<ServiceFactories>> = {
   mock: mockServiceFactories,
-  // Api* services land with the backend; until then every slot throws service_unavailable.
-  api: {},
+  api: apiServiceFactories,
+}
+
+/** Picks each service's factory from the slot its mode selects (missing stays missing). */
+export function selectServiceFactories(
+  modes: ServiceModes,
+  slots: Record<ServiceMode, Partial<ServiceFactories>>,
+): Partial<ServiceFactories> {
+  const selected: Partial<ServiceFactories> = {}
+  for (const name of SERVICE_NAMES) {
+    const factory = slots[modes[name]][name]
+    // Each slot is keyed by the same name, so the assignment is type-correct per key.
+    if (factory) (selected as Record<ServiceName, unknown>)[name] = factory
+  }
+  return selected
 }
 
 /** Builds a registry whose members are created on first access and then memoised. */
-export function createServices(factories: Partial<ServiceFactories>, mode: ServiceMode): ServiceRegistry {
+export function createServices(
+  factories: Partial<ServiceFactories>,
+  mode: ServiceMode | ServiceModes,
+): ServiceRegistry {
   const instances: Partial<ServiceRegistry> = {}
 
   function resolve<K extends ServiceName>(name: K): ServiceRegistry[K] {
@@ -86,7 +108,9 @@ export function createServices(factories: Partial<ServiceFactories>, mode: Servi
     const factory = factories[name]
     if (!factory) {
       throw new AppException("service_unavailable", {
-        cause: new Error(`No ${mode} implementation registered for service "${name}".`),
+        cause: new Error(
+          `No ${typeof mode === "string" ? mode : mode[name]} implementation registered for service "${name}".`,
+        ),
       })
     }
 
@@ -115,4 +139,7 @@ export function createServices(factories: Partial<ServiceFactories>, mode: Servi
 }
 
 /** Application-wide service container. */
-export const services: ServiceRegistry = createServices(serviceFactories[serviceMode], serviceMode)
+export const services: ServiceRegistry = createServices(
+  selectServiceFactories(serviceModes, serviceFactories),
+  serviceModes,
+)

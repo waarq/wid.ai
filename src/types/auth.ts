@@ -37,4 +37,9 @@ export interface GoogleSignInInput {
   accountId?: string
   loginHint?: string
   intent: "sign_in" | "register"
+  /**
+   * Safe same-origin path to return to after a redirect-based (real OAuth)
+   * sign-in. Mock sign-in resolves in place and ignores it.
+   */
+  next?: string | null
 }

@@ -1,7 +1,7 @@
 import type { AuthStage } from "@/types"
 
 /*
- * MOCK ROUTE GATING ONLY. READ BEFORE CHANGING.
+ * MOCK ROUTE GATING ONLY (ignored with real auth). READ BEFORE CHANGING.
  *
  * The "session hint" is a tiny, non-sensitive cookie that tells `src/proxy.ts`
  * which of the three routing stages a visitor is in. It holds no identity,
@@ -13,6 +13,10 @@ import type { AuthStage } from "@/types"
  * its own httpOnly session cookie (or a bearer token held in memory, see
  * `setAuthTokenProvider` in lib/api). When a real backend lands it can keep
  * setting this hint cookie for routing, or proxy.ts can read its own cookie.
+ *
+ * With real auth (services/modes.ts `isRealAuth`) proxy.ts derives the stage
+ * from verified Supabase claims instead (lib/auth/claims.ts) and nothing
+ * writes this cookie; only the Mock* services do.
  *
  * This module is isomorphic (no browser or Node APIs) so the proxy, server
  * components and client code can all share it.

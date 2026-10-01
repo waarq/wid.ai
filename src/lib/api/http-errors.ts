@@ -1,4 +1,4 @@
-import { AppException } from "@/lib/utils/errors"
+import { AppException, isAppErrorCode } from "@/lib/utils/errors"
 import type { AppErrorCode, AppErrorDetails, JsonValue } from "@/types"
 
 import type { AdapterResponse } from "./types"
@@ -17,6 +17,7 @@ function codeForStatus(status: number): AppErrorCode {
   if (status === 408) return "timeout"
   if (status === 409 || status === 412) return "conflict"
   if (status === 429) return "rate_limited"
+  if (status === 503) return "service_unavailable"
   if (status >= 500) return "server_error"
   return "unknown"
 }
@@ -41,6 +42,18 @@ function extractFieldErrors(data: JsonValue | null): Record<string, string[]> | 
   return Object.keys(result).length > 0 ? result : undefined
 }
 
+/**
+ * The backend error envelope is `{ code, message, requestId, fieldErrors?, retryable }`
+ * (docs/backend/01-architecture.md section 10). A known `code` wins over the
+ * status mapping so domain codes (calendar_connection_failed on a 502, ...)
+ * survive. Unknown codes fall back to the status.
+ */
+function codeFromBody(data: JsonValue | null): AppErrorCode | undefined {
+  if (!isJsonObject(data)) return undefined
+  const code = data.code
+  return typeof code === "string" && isAppErrorCode(code) ? code : undefined
+}
+
 function parseRetryAfter(value: string | undefined): number | undefined {
   if (!value) return undefined
   const seconds = Number(value)
@@ -51,10 +64,11 @@ function parseRetryAfter(value: string | undefined): number | undefined {
 
 /**
  * Maps a non-2xx response to an AppException. The backend's own message is
- * deliberately discarded; only structured, user-addressable data is kept.
+ * deliberately discarded; only the code and structured, user-addressable data
+ * (fieldErrors, Retry-After) are kept.
  */
 export function httpErrorFromResponse(response: AdapterResponse, requestId: string): AppException {
-  const code = codeForStatus(response.status)
+  const code = codeFromBody(response.data) ?? codeForStatus(response.status)
   const details: AppErrorDetails = { status: response.status, requestId }
 
   const fieldErrors = code === "validation_error" ? extractFieldErrors(response.data) : undefined

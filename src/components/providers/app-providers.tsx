@@ -6,8 +6,16 @@ import { ThemeProvider } from "next-themes"
 
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { queryKeys } from "@/lib/query"
 import { makeQueryClient } from "@/lib/query/client"
+import { installSupabaseTokenProvider, onSupabaseSignedOut } from "@/lib/supabase/token-bridge"
+import { isRealAuth } from "@/services/modes"
 import { rehydratePersistedStores } from "@/store/persisted"
+
+// Real auth: register the Supabase token source with apiClient at module load,
+// so it is in place before the first query fires (child effects run before
+// this component's effects). No-op on the server and in mock mode.
+if (isRealAuth) installSupabaseTokenProvider()
 
 export function AppProviders({ children }: { children: ReactNode }) {
   // Lazy init keeps one client per browser session and one per server request.
@@ -18,6 +26,16 @@ export function AppProviders({ children }: { children: ReactNode }) {
   useEffect(() => {
     rehydratePersistedStores()
   }, [])
+
+  // Real auth: a session ended elsewhere (other tab, revoked refresh token)
+  // drops this account's cached data; the next navigation hits the proxy.
+  useEffect(() => {
+    if (!isRealAuth) return
+    return onSupabaseSignedOut(() => {
+      queryClient.removeQueries({ predicate: (query) => query.queryKey[0] !== queryKeys.auth.all[0] })
+      queryClient.setQueryData(queryKeys.auth.session(), null)
+    })
+  }, [queryClient])
 
   return (
     <ThemeProvider
